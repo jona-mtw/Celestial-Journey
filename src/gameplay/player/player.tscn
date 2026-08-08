@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=3 uid="uid://dew2j6vtburbv"]
+
+[ext_resource type="Script" uid="uid://mjj5mw58hyrs" path="res://src/gameplay/player/player.gd" id="1_64h4j"]
+[ext_resource type="PackedScene" uid="uid://cgdupwf5f1itd" path="res://assets/art/entities/player/models/player.glb" id="1_kh5p4"]
+[ext_resource type="Script" uid="uid://bu6jn8bq4wggh" path="res://src/gameplay/player/camera.gd" id="2_k2146"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_64h4j"]
+radius = 0.507
+height = 2.7045546
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_kh5p4"]
+radius = 0.2
+
+[node name="Player" type="CharacterBody3D"]
+collision_layer = 2
+script = ExtResource("1_64h4j")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.9993537, 0, 0.035946038, 0, 1, 0, -0.035946038, 0, 0.9993537, 0, 1.347624, 0)
+shape = SubResource("CapsuleShape3D_64h4j")
+
+[node name="CameraPivot" type="SpringArm3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -0.3)
+shape = SubResource("SphereShape3D_kh5p4")
+spring_length = 10.0
+margin = 0.2
+script = ExtResource("2_k2146")
+max_zoom = 30.0
+
+[node name="Camera" type="Camera3D" parent="CameraPivot"]
+
+[node name="player" parent="." instance=ExtResource("1_kh5p4")]
+transform = Transform3D(-8.742278e-09, 0, 0.15067397, 0, 0.14931998, 0, -0.2, 0, -6.5861685e-09, 0, 1.4, 0)

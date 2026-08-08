@@ -1,0 +1,58 @@
+[gd_scene load_steps=3 format=3 uid="uid://cpd8mby2cspyb"]
+
+[ext_resource type="PackedScene" uid="uid://dew2j6vtburbv" path="res://src/gameplay/player/player.tscn" id="1_3fed5"]
+[ext_resource type="PackedScene" uid="uid://cncsm6iq6yggl" path="res://src/levels/world.tscn" id="2_6yl8a"]
+
+[node name="MainGame" type="Node"]
+
+[node name="Systems" type="Node" parent="."]
+
+[node name="World" type="Node3D" parent="."]
+
+[node name="EntityRoot" type="Node3D" parent="World"]
+
+[node name="Player" parent="World/EntityRoot" instance=ExtResource("1_3fed5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.3459444, 0.69884944, 13.260614)
+
+[node name="EffectRoot" type="Node3D" parent="World"]
+
+[node name="LevelRoot" type="Node3D" parent="World"]
+
+[node name="World" parent="World/LevelRoot" instance=ExtResource("2_6yl8a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.036246777, -0.21016312, 0.06258774)
+
+[node name="HudLayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="HudRoot" type="Control" parent="HudLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PauseLayer" type="CanvasLayer" parent="."]
+layer = 20
+
+[node name="PauseRoot" type="Control" parent="PauseLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TransitionLayer" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="TransitionRoot" type="Control" parent="TransitionLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="DebugLayer" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="DebugRoot" type="Control" parent="DebugLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0

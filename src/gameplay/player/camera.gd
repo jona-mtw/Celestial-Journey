@@ -1,0 +1,27 @@
+extends SpringArm3D
+
+@onready var camera: Camera3D = $Camera
+@onready var player: CharacterBody3D = $'..'
+
+@export var sensitivity: float = 0.01
+@export var min_zoom: float = 0.0
+@export var max_zoom: float = 20.0
+@export var zoom_step = 3
+@export var zoom_speed = 3
+
+@onready var target_zoom: float = spring_length
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		player.rotation.y -= event.relative.x * sensitivity
+		rotation.x -= event.relative.y * sensitivity
+		print(rotation.x)
+		rotation.x = clamp(rotation.x, deg_to_rad(-90), deg_to_rad(90))
+
+	if event.is_action_pressed("mouse_wheel_up"):
+		target_zoom = clamp(target_zoom - zoom_step, min_zoom, max_zoom)
+	if event.is_action_pressed("mouse_wheel_down"):
+		target_zoom = clamp(target_zoom + zoom_step, min_zoom, max_zoom)
+		
+func _process(delta: float) -> void:
+	spring_length = lerp(spring_length, target_zoom, zoom_speed * delta)
