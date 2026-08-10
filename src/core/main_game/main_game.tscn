@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cpd8mby2cspyb"]
 
 [ext_resource type="PackedScene" uid="uid://dew2j6vtburbv" path="res://src/gameplay/player/player.tscn" id="1_3fed5"]
-[ext_resource type="PackedScene" uid="uid://cncsm6iq6yggl" path="res://src/levels/world.tscn" id="2_6yl8a"]
+[ext_resource type="PackedScene" uid="uid://kvjhsaqnruys" path="res://src/levels/planet.tscn" id="2_6yl8a"]
 
 [node name="MainGame" type="Node"]
 
@@ -12,14 +12,12 @@
 [node name="EntityRoot" type="Node3D" parent="World"]
 
 [node name="Player" parent="World/EntityRoot" instance=ExtResource("1_3fed5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.3459444, 0.69884944, 13.260614)
 
 [node name="EffectRoot" type="Node3D" parent="World"]
 
 [node name="LevelRoot" type="Node3D" parent="World"]
 
-[node name="World" parent="World/LevelRoot" instance=ExtResource("2_6yl8a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.036246777, -0.21016312, 0.06258774)
+[node name="Planet" parent="World/LevelRoot" instance=ExtResource("2_6yl8a")]
 
 [node name="HudLayer" type="CanvasLayer" parent="."]
 layer = 10

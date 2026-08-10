@@ -15,7 +15,6 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		player.rotation.y -= event.relative.x * sensitivity
 		rotation.x -= event.relative.y * sensitivity
-		print(rotation.x)
 		rotation.x = clamp(rotation.x, deg_to_rad(-90), deg_to_rad(90))
 
 	if event.is_action_pressed("mouse_wheel_up"):
