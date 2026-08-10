@@ -20,14 +20,14 @@ func generate_indices() -> Array:
     var indices := PackedInt32Array()
 
     for index in size * size:
-        # if (index + 1) % size == 0:
-        #     continue
-        # elif index >= size * size - size:
-        #     break
+        if (index + 1) % size == 0:
+            continue
+        elif index >= size * size - size:
+            break
         var triangle1 := [
-            index, # point 1
+            index + size, # point 1
             index + 1, # point 2
-            index + size # point 3
+            index # point 3
         ]
         indices.append_array(triangle1)
 
@@ -57,6 +57,7 @@ func generate_terrain() -> void:
     terrain.mesh = arr_mesh
 
     add_child(terrain)
+    terrain.create_trimesh_collision()
 
 func _ready() -> void:
     generate_terrain()

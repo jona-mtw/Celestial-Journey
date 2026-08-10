@@ -12,6 +12,7 @@
 [node name="EntityRoot" type="Node3D" parent="World"]
 
 [node name="Player" parent="World/EntityRoot" instance=ExtResource("1_3fed5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.9732656, 0, 4.426429)
 
 [node name="EffectRoot" type="Node3D" parent="World"]
 

@@ -17,6 +17,7 @@ sky = SubResource("Sky_jimqh")
 
 [node name="Planet" type="Node3D"]
 script = ExtResource("1_o3ck0")
+size = 10
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_qd0h3")

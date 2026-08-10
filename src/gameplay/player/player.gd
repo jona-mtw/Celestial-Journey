@@ -9,9 +9,9 @@ func _input(event: InputEvent) -> void:
 	elif event.is_action_pressed("escape"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
-func _physics_process(_delta: float) -> void:
-	#if not is_on_floor():
-	#	velocity += get_gravity() * delta
+func _physics_process(delta: float) -> void:
+	if not is_on_floor():
+		velocity += get_gravity() * delta
 	if Input.is_action_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
