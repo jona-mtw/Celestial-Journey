@@ -1,8 +1,28 @@
-[gd_scene load_steps=4 format=3 uid="uid://cpd8mby2cspyb"]
+[gd_scene load_steps=8 format=3 uid="uid://cpd8mby2cspyb"]
 
 [ext_resource type="PackedScene" uid="uid://dew2j6vtburbv" path="res://src/gameplay/player/player.tscn" id="1_3fed5"]
-[ext_resource type="PackedScene" uid="uid://kvjhsaqnruys" path="res://src/levels/planet.tscn" id="2_6yl8a"]
+[ext_resource type="PackedScene" uid="uid://kvjhsaqnruys" path="res://src/levels/terrain.tscn" id="2_6yl8a"]
 [ext_resource type="PackedScene" uid="uid://dmqh1a0jy1fwr" path="res://src/ui/pause_menu/pause_menu.tscn" id="3_6n4xl"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_6n4xl"]
+
+[sub_resource type="Sky" id="Sky_ibp4d"]
+sky_material = SubResource("ProceduralSkyMaterial_6n4xl")
+
+[sub_resource type="Environment" id="Environment_6n4xl"]
+background_mode = 2
+sky = SubResource("Sky_ibp4d")
+ambient_light_source = 3
+tonemap_mode = 2
+ssao_intensity = 3.76
+ssao_power = 0.2745179
+ssao_detail = 1.0
+ssao_sharpness = 1.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.01
+volumetric_fog_length = 200.0
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_6n4xl"]
 
 [node name="MainGame" type="Node"]
 
@@ -13,14 +33,24 @@
 [node name="EntityRoot" type="Node3D" parent="World"]
 
 [node name="Player" parent="World/EntityRoot" instance=ExtResource("1_3fed5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.9732656, 0, 4.426429)
+transform = Transform3D(0.92265934, 0, 0.3856162, 0, 1, 0, -0.3856162, 0, 0.92265934, 1.8622651, 1.8285775, 4.426429)
 
 [node name="EffectRoot" type="Node3D" parent="World"]
 
 [node name="LevelRoot" type="Node3D" parent="World"]
 
-[node name="Planet" parent="World/LevelRoot" instance=ExtResource("2_6yl8a")]
-strength = 5
+[node name="Terrain" parent="World/LevelRoot" instance=ExtResource("2_6yl8a")]
+chunk_size = 16
+chunks = 16
+size = 265
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="World/LevelRoot"]
+environment = SubResource("Environment_6n4xl")
+camera_attributes = SubResource("CameraAttributesPractical_6n4xl")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="World/LevelRoot"]
+transform = Transform3D(-0.8704731, 0.20013651, -0.44969106, -0.019565169, 0.89881426, 0.43789288, 0.49182707, 0.38997224, -0.7784779, 0, 3.9338326, 0)
+shadow_enabled = true
 
 [node name="HudLayer" type="CanvasLayer" parent="."]
 layer = 10

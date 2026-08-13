@@ -1,6 +1,16 @@
 @tool
 extends Node3D
 
+@export_category("Chunk Settings")
+@export_range(8, 32, 2) var chunk_size := 16:
+	set(value):
+		chunk_size = value
+		generate_terrain()
+@export_range(2, 32, 1) var chunks := 16:
+	set(value):
+		chunks = value
+		generate_terrain()
+
 @export_category("Terrain Settings")
 @export_range(2, 265, 1) var size := 10:
 	set(value):
@@ -44,10 +54,10 @@ func generate_verts() -> Array:
 	var vert := Vector3(0, 0, 0)
 
 	for x in size + 1:
-		vert.x = float(x) / size * size
+		vert.x = float(x)
 		for z in size + 1:
 			vert.y = noise.get_noise_2d(x, z) * strength
-			vert.z = float(z) / size * size
+			vert.z = float(z)
 			vertices.push_back(vert)
 
 	return vertices
