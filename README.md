@@ -2,11 +2,12 @@
 
 Eventually will become a game where you can explore a procedurally generated universe in your spacecraft, land on planets, orbit around stars, and record your journey every step of the way if you so wish by taking photos and putting them in albums.
 
-VERY EARLY STAGES
-
 ### **Current Features:**
 * can move the player
-(told you it was very early)
+* very basic procedural terrain generation
+* pause menu, where you can exit the game from
+* settings menu, where you will be able to change seetings
+* no textures or shaders :(
 
 <br>
 

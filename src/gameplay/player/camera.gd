@@ -3,11 +3,11 @@ extends SpringArm3D
 @onready var camera: Camera3D = $Camera
 @onready var player: CharacterBody3D = $'..'
 
-@export var sensitivity: float = 0.01
+@export var sensitivity: float = 0.005
 @export var min_zoom: float = 0.0
 @export var max_zoom: float = 20.0
 @export var zoom_step = 3
-@export var zoom_speed = 3
+@export var zoom_speed = 5
 
 @onready var target_zoom: float = spring_length
 

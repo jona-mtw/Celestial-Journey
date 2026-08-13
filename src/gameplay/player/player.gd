@@ -1,13 +1,7 @@
 extends CharacterBody3D
 
-const SPEED: float = 5.0
+const SPEED: float = 10
 const JUMP_VELOCITY: float = 4.5
-
-func _input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	elif event.is_action_pressed("escape"):
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():

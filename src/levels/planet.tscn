@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://kvjhsaqnruys"]
 
-[ext_resource type="Script" uid="uid://oww7n3u8j8hv" path="res://src/levels/planet.gd" id="1_o3ck0"]
+[ext_resource type="Script" uid="uid://oww7n3u8j8hv" path="res://src/levels/terrain_generation.gd" id="1_o3ck0"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qd0h3"]
 
@@ -17,7 +17,11 @@ sky = SubResource("Sky_jimqh")
 
 [node name="Planet" type="Node3D"]
 script = ExtResource("1_o3ck0")
-size = 10
+size = 100
+terrain_seed = 2
+freq = 0.02
+fractal_octaves = 3
+strength = null
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_qd0h3")
