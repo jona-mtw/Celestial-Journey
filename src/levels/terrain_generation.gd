@@ -2,13 +2,9 @@
 extends Node3D
 
 @export_category("Chunk Settings")
-@export_range(8, 32, 2) var chunk_size := 16:
+@export_range(2, 32, 1) var render_distance := 16:
 	set(value):
-		chunk_size = value
-		generate_terrain()
-@export_range(2, 32, 1) var chunks := 16:
-	set(value):
-		chunks = value
+		render_distance = value
 		generate_terrain()
 
 @export_category("Terrain Settings")
@@ -42,9 +38,8 @@ extends Node3D
 		generate_terrain()
 
 var noise = FastNoiseLite.new()
+var chunk_size = 16
 
-func _ready() -> void:
-	generate_terrain()
 
 func generate_verts() -> Array:
 	noise.seed = terrain_seed
@@ -145,3 +140,6 @@ func generate_terrain() -> void:
 
 	add_child(terrain)
 	terrain.create_trimesh_collision()
+
+func _ready() -> void:
+	generate_terrain()
