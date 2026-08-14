@@ -2,60 +2,59 @@
 extends Node3D
 
 @export_category("Chunk Settings")
-@export_range(2, 32, 1) var render_distance := 16:
+@export_range(2, 128, 1) var render_distance := 10:
 	set(value):
 		render_distance = value
-		generate_terrain()
+		#generate_terrain()
 
 @export_category("Terrain Settings")
-@export_range(2, 265, 1) var size := 10:
-	set(value):
-		size = value
-		generate_terrain()
 @export var terrain_seed := randi():
 	set(value):
 		terrain_seed = value
-		generate_terrain()
+		#generate_terrain()
 @export var freq := 0.01:
 	set(value):
 		freq = value
-		generate_terrain()
+		#generate_terrain()
 @export_range(1, 8, 1) var octaves := 5:
 	set(value):
 		octaves = value
-		generate_terrain()
+		#generate_terrain()
 @export var gain := 0.5:
 	set(value):
 		gain = value
-		generate_terrain()
+		#generate_terrain()
 @export var lacunarity := 2.0:
 	set(value):
 		lacunarity = value
-		generate_terrain()
+		#generate_terrain()
 @export var strength := 5:
 	set(value):
 		strength = value
-		generate_terrain()
+		#generate_terrain()
 
 var noise = FastNoiseLite.new()
 var chunk_size = 16
+var collision_chunk_size = 1
 
-
-func generate_verts() -> Array:
+func generate_verts(chunk_pos: Vector2i) -> Array:
 	noise.seed = terrain_seed
 	noise.frequency = freq
 	noise.fractal_octaves = octaves
 	noise.fractal_gain = gain
 	noise.fractal_lacunarity = lacunarity
-    
+	
 	var vertices := PackedVector3Array()
 	var vert := Vector3(0, 0, 0)
 
-	for x in size + 1:
-		vert.x = float(x)
-		for z in size + 1:
-			vert.y = noise.get_noise_2d(x, z) * strength
-			vert.z = float(z)
+	var x_offset = chunk_pos.x * chunk_size
+	var z_offset = chunk_pos.y * chunk_size
+
+	for x in chunk_size + 1:
+		vert.x = x + x_offset
+		for z in chunk_size + 1:
+			vert.z = z + z_offset
+			vert.y = noise.get_noise_2d(vert.x, vert.z) * strength
 			vertices.push_back(vert)
 
 	return vertices
@@ -63,9 +62,6 @@ func generate_verts() -> Array:
 func calculate_normals(vertices, indices) -> Array:
 	var normals := PackedVector3Array()
 	normals.resize(vertices.size())
-	
-	for normal in normals:
-		normal = Vector3.ZERO
 
 	for index in range(0, indices.size(), 3):
 		var index_a = indices[index]
@@ -115,18 +111,18 @@ func generate_indices(length) -> Array:
 
 	return indices
 
-func generate_terrain() -> void:
+func generate_chunk(chunk_pos: Vector2i, collision: bool) -> void:
 	for child in get_children():
-		if child.name.begins_with("GeneratedTerrain"):
+		if child.name.contains("chunk_pos_%s_%s" % [chunk_pos.x, chunk_pos.y]):
 			child.free()
 
-	var vertices: PackedVector3Array = generate_verts()
+	var arrays := []
+	var vertices: PackedVector3Array = generate_verts(chunk_pos)
 	var indices: PackedInt32Array = generate_indices(vertices.size())
 	var normals: PackedVector3Array = calculate_normals(vertices, indices)
 
-	var arrays := []
+	arrays = []
 	arrays.resize(Mesh.ARRAY_MAX)
-
 	arrays[Mesh.ARRAY_VERTEX] = vertices
 	arrays[Mesh.ARRAY_NORMAL] = normals
 	arrays[Mesh.ARRAY_INDEX] = indices
@@ -136,10 +132,32 @@ func generate_terrain() -> void:
 
 	var terrain := MeshInstance3D.new()
 	terrain.mesh = arr_mesh
-	terrain.name = "GeneratedTerrain"
+	terrain.name = "chunk_pos_%s_%s" % [chunk_pos.x, chunk_pos.y]
 
 	add_child(terrain)
-	terrain.create_trimesh_collision()
+
+	if collision:
+		terrain.create_trimesh_collision()
+
+func generate_terrain(player_coord: Vector2i) -> void:
+	var chunk: Vector2i
+	var collision: bool
+	for chunk_x in range(player_coord.x - render_distance, player_coord.x + render_distance + 1):
+		chunk.x = chunk_x
+		for chunk_y in range(player_coord.y - render_distance, player_coord.y + render_distance + 1):
+			chunk.y = chunk_y
+			if (abs(player_coord.x - chunk.x) > collision_chunk_size and abs(player_coord.y - chunk.y) > collision_chunk_size):
+				collision = false
+			else:
+				collision = true
+			print(chunk_x, chunk_y)
+			generate_chunk(chunk, collision)
+
+			await get_tree().process_frame
+
+func _on_player_moved(player_position: Vector2i) -> void:
+	generate_terrain(player_position)
 
 func _ready() -> void:
-	generate_terrain()
+	generate_terrain(Vector2i(0, 0))
+	EventListener.player_chunk_changed.connect(_on_player_moved)
