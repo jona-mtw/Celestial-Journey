@@ -24,17 +24,17 @@ extends Node3D
 	set(value):
 		freq = value
 		generate_terrain()
-@export_range(1, 8, 1) var fractal_octaves := 5:
+@export_range(1, 8, 1) var octaves := 5:
 	set(value):
-		fractal_octaves = value
+		octaves = value
 		generate_terrain()
-@export var fractal_gain := 0.5:
+@export var gain := 0.5:
 	set(value):
-		fractal_gain = value
+		gain = value
 		generate_terrain()
-@export var fractal_lacunarity := 2.0:
+@export var lacunarity := 2.0:
 	set(value):
-		fractal_lacunarity = value
+		lacunarity = value
 		generate_terrain()
 @export var strength := 5:
 	set(value):
@@ -49,6 +49,9 @@ func _ready() -> void:
 func generate_verts() -> Array:
 	noise.seed = terrain_seed
 	noise.frequency = freq
+	noise.fractal_octaves = octaves
+	noise.fractal_gain = gain
+	noise.fractal_lacunarity = lacunarity
     
 	var vertices := PackedVector3Array()
 	var vert := Vector3(0, 0, 0)
@@ -61,6 +64,36 @@ func generate_verts() -> Array:
 			vertices.push_back(vert)
 
 	return vertices
+
+func calculate_normals(vertices, indices) -> Array:
+	var normals := PackedVector3Array()
+	normals.resize(vertices.size())
+	
+	for normal in normals:
+		normal = Vector3.ZERO
+
+	for index in range(0, indices.size(), 3):
+		var index_a = indices[index]
+		var index_b = indices[index + 1]
+		var index_c = indices[index + 2]
+
+		var vertex_A = vertices[index_a]
+		var vertex_B = vertices[index_b]
+		var vertex_C = vertices[index_c]
+
+		var vector_BA = vertex_B - vertex_A
+		var vector_CA = vertex_C - vertex_A
+
+		var face_normal = vector_CA.cross(vector_BA)
+
+		normals[index_a] += face_normal
+		normals[index_b] += face_normal
+		normals[index_c] += face_normal
+
+	for i in normals.size():
+		normals[i] = normals[i].normalized()
+
+	return normals
 
 func generate_indices(length) -> Array:
 	var indices := PackedInt32Array()
@@ -93,12 +126,14 @@ func generate_terrain() -> void:
 			child.free()
 
 	var vertices: PackedVector3Array = generate_verts()
-	var indices: PackedInt32Array = generate_indices(len(vertices))
+	var indices: PackedInt32Array = generate_indices(vertices.size())
+	var normals: PackedVector3Array = calculate_normals(vertices, indices)
 
 	var arrays := []
 	arrays.resize(Mesh.ARRAY_MAX)
 
 	arrays[Mesh.ARRAY_VERTEX] = vertices
+	arrays[Mesh.ARRAY_NORMAL] = normals
 	arrays[Mesh.ARRAY_INDEX] = indices
 
 	var arr_mesh := ArrayMesh.new()

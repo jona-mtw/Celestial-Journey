@@ -33,23 +33,21 @@ volumetric_fog_length = 200.0
 [node name="EntityRoot" type="Node3D" parent="World"]
 
 [node name="Player" parent="World/EntityRoot" instance=ExtResource("1_3fed5")]
-transform = Transform3D(0.92265934, 0, 0.3856162, 0, 1, 0, -0.3856162, 0, 0.92265934, 1.8622651, 1.8285775, 4.426429)
+transform = Transform3D(0.92265934, 0, 0.3856162, 0, 1, 0, -0.3856162, 0, 0.92265934, 20.807684, 19.285133, 10.849771)
 
 [node name="EffectRoot" type="Node3D" parent="World"]
 
 [node name="LevelRoot" type="Node3D" parent="World"]
 
 [node name="Terrain" parent="World/LevelRoot" instance=ExtResource("2_6yl8a")]
-chunk_size = 16
-chunks = 16
-size = 265
+strength = 5
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="World/LevelRoot"]
 environment = SubResource("Environment_6n4xl")
 camera_attributes = SubResource("CameraAttributesPractical_6n4xl")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="World/LevelRoot"]
-transform = Transform3D(-0.8704731, 0.20013651, -0.44969106, -0.019565169, 0.89881426, 0.43789288, 0.49182707, 0.38997224, -0.7784779, 0, 3.9338326, 0)
+transform = Transform3D(-0.8704731, 0.20013651, -0.44969106, -0.019565169, 0.89881426, 0.43789288, 0.49182707, 0.38997224, -0.7784779, 0, 22.005526, 0)
 shadow_enabled = true
 
 [node name="HudLayer" type="CanvasLayer" parent="."]

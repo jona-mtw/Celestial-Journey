@@ -4,9 +4,6 @@
 
 [node name="Terrain" type="Node3D"]
 script = ExtResource("1_o3ck0")
-chunk_size = null
-chunks = null
-size = 100
-terrain_seed = 2
-freq = 0.02
-fractal_octaves = 3
+size = 265
+terrain_seed = 10
+strength = 90
