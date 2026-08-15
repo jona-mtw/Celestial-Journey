@@ -25,7 +25,6 @@ shape = SubResource("SphereShape3D_kh5p4")
 spring_length = 10.0
 margin = 0.2
 script = ExtResource("2_k2146")
-max_zoom = 30.0
 
 [node name="Camera" type="Camera3D" parent="CameraPivot"]
 

@@ -2,7 +2,7 @@
 extends Node3D
 
 @export_category("Chunk Settings")
-@export_range(2, 128, 1) var render_distance := 10:
+@export_range(2, 128, 1) var render_distance := 15:
 	set(value):
 		render_distance = value
 		#generate_terrain()
@@ -35,7 +35,8 @@ extends Node3D
 
 var noise = FastNoiseLite.new()
 var chunk_size = 16
-var collision_chunk_size = 1
+var collision_chunk_size = 3
+var loaded_chunks: PackedVector2Array
 
 func generate_verts(chunk_pos: Vector2i) -> Array:
 	noise.seed = terrain_seed
@@ -140,22 +141,41 @@ func generate_chunk(chunk_pos: Vector2i, collision: bool) -> void:
 		terrain.create_trimesh_collision()
 
 func generate_terrain(player_coord: Vector2i) -> void:
+	# collision handler
+	for child in get_children():
+		if child.get_child_count(true) == 0:
+			continue
+		else:
+			var child_name_array = child.name.split("_")
+			var child_x: int = int(child_name_array[2])
+			var child_y: int = int(child_name_array[3])
+			print(child_x, child_y)
+			
+			if abs(player_coord.x - child_x) > collision_chunk_size or abs(player_coord.y - child_y) > collision_chunk_size:
+				child.free()
+				loaded_chunks.erase(Vector2(child_x, child_y))
+
 	var chunk: Vector2i
 	var collision: bool
 	for chunk_x in range(player_coord.x - render_distance, player_coord.x + render_distance + 1):
 		chunk.x = chunk_x
 		for chunk_y in range(player_coord.y - render_distance, player_coord.y + render_distance + 1):
 			chunk.y = chunk_y
-			if (abs(player_coord.x - chunk.x) > collision_chunk_size and abs(player_coord.y - chunk.y) > collision_chunk_size):
-				collision = false
-			else:
+			if loaded_chunks.has(chunk):
+				continue
+			
+			if (abs(player_coord.x - chunk.x) < collision_chunk_size and abs(player_coord.y - chunk.y) < collision_chunk_size):
 				collision = true
-			print(chunk_x, chunk_y)
+			else:
+				collision = false
 			generate_chunk(chunk, collision)
+
+			loaded_chunks.append(chunk)
 
 			await get_tree().process_frame
 
 func _on_player_moved(player_position: Vector2i) -> void:
+	print(player_position)
 	generate_terrain(player_position)
 
 func _ready() -> void:
