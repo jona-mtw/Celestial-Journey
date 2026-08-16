@@ -70,29 +70,112 @@ func generate_verts(chunk_pos: Vector2i) -> Array:
 
 	return vertices
 
-func calculate_normals(vertices: PackedVector3Array) -> PackedVector3Array:
+func calculate_normals(vertices: PackedVector3Array, indices) -> PackedVector3Array:
 	var normals := PackedVector3Array()
-	var sample_distance := 1.0
+	normals.resize(vertices.size())
 
-	for vertex in vertices:
-		var left := vertex + Vector3(-sample_distance, 0, 0)
-		var right := vertex + Vector3(sample_distance, 0, 0)
-		var down := vertex + Vector3(0, 0, -sample_distance)
-		var up := vertex + Vector3(0, 0, sample_distance)
+	var width := int(sqrt(vertices.size()))
 
-		left.y = get_noise(left)
-		right.y = get_noise(right)
-		down.y = get_noise(down)
-		up.y = get_noise(up)
+	var origin_x := vertices[0].x
+	var origin_z := vertices[0].z
 
-		var dx := right - left
-		var dz := up - down
+	for vertex_index in vertices.size():
+		var local_x := vertex_index / width
+		var local_z := vertex_index % width
 
-		var normal := dz.cross(dx).normalized()
+		# A vertex can be surrounded by up to 4 cells.
+		for cell_x in range(local_x - 1, local_x + 1):
+			for cell_z in range(local_z - 1, local_z + 1):
+				var world_x := origin_x + cell_x
+				var world_z := origin_z + cell_z
 
-		normals.append(normal)
+				# Cell vertices:
+				#
+				# C -------- D
+				# |        / |
+				# |      /   |
+				# |    /     |
+				# A -------- B
+				#
+				# A = (x,   z)
+				# C = (x,   z+1)
+				# B = (x+1, z)
+				# D = (x+1, z+1)
+
+				var A := Vector3(world_x, 0, world_z)
+				A.y = get_noise(A)
+
+				var B := Vector3(world_x + 1, 0, world_z)
+				B.y = get_noise(B)
+
+				var C := Vector3(world_x, 0, world_z + 1)
+				C.y = get_noise(C)
+
+				var D := Vector3(world_x + 1, 0, world_z + 1)
+				D.y = get_noise(D)
+
+				# -------------------------
+				# Triangle 1
+				# [B, C, A]
+				# -------------------------
+
+				if (local_x == cell_x + 1 and local_z == cell_z) \
+				or (local_x == cell_x and local_z == cell_z + 1) \
+				or (local_x == cell_x and local_z == cell_z):
+					var vertex_A := B
+					var vertex_B := C
+					var vertex_C := A
+
+					var vector_BA := vertex_B - vertex_A
+					var vector_CA := vertex_C - vertex_A
+
+					var face_normal := vector_CA.cross(vector_BA)
+
+					normals[vertex_index] += face_normal
+
+				# -------------------------
+				# Triangle 2
+				# [C, B, D]
+				# -------------------------
+
+				if (local_x == cell_x and local_z == cell_z + 1) \
+				or (local_x == cell_x + 1 and local_z == cell_z) \
+				or (local_x == cell_x + 1 and local_z == cell_z + 1):
+					var vertex_A := C
+					var vertex_B := B
+					var vertex_C := D
+
+					var vector_BA := vertex_B - vertex_A
+					var vector_CA := vertex_C - vertex_A
+
+					var face_normal := vector_CA.cross(vector_BA)
+
+					normals[vertex_index] += face_normal
+
+	for i in normals.size():
+		normals[i] = normals[i].normalized()
 
 	return normals
+
+	# var sample_distance := 1.0
+
+	# for vertex in vertices:
+	# 	var left := vertex + Vector3(-sample_distance, 0, 0)
+	# 	var right := vertex + Vector3(sample_distance, 0, 0)
+	# 	var down := vertex + Vector3(0, 0, -sample_distance)
+	# 	var up := vertex + Vector3(0, 0, sample_distance)
+
+	# 	left.y = get_noise(left)
+	# 	right.y = get_noise(right)
+	# 	down.y = get_noise(down)
+	# 	up.y = get_noise(up)
+
+	# 	var dx := right - left
+	# 	var dz := up - down
+
+	# 	var normal := dz.cross(dx).normalized()
+
+	# 	normals.append(normal)
 
 func generate_indices(length) -> Array:
 	var indices := PackedInt32Array()
@@ -124,8 +207,8 @@ func generate_indices(length) -> Array:
 func generate_chunk(chunk_pos: Vector2i) -> void:
 	var arrays := []
 	var vertices: PackedVector3Array = generate_verts(chunk_pos)
-	var normals: PackedVector3Array = calculate_normals(vertices)
 	var indices: PackedInt32Array = generate_indices(vertices.size())
+	var normals: PackedVector3Array = calculate_normals(vertices, indices)
 
 	arrays = []
 	arrays.resize(Mesh.ARRAY_MAX)
