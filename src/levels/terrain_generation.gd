@@ -2,7 +2,7 @@
 extends Node3D
 
 @export_category("Chunk Settings")
-@export_range(2, 128, 1) var render_distance := 30:
+@export_range(2, 128, 1) var render_distance := 5:
 	set(value):
 		render_distance = value
 		#generate_terrain()
@@ -35,7 +35,7 @@ extends Node3D
 
 var noise = FastNoiseLite.new()
 var chunk_size = 16
-var collision_chunk_size = 5
+var collision_chunk_size = 3
 var loaded_chunks: PackedVector2Array
 
 
@@ -58,8 +58,8 @@ func generate_verts(chunk_pos: Vector2i) -> Array:
 	var vertices := PackedVector3Array()
 	var vert := Vector3(0, 0, 0)
 
-	var x_offset = chunk_pos.x * chunk_size
-	var z_offset = chunk_pos.y * chunk_size
+	var x_offset = floor(chunk_pos.x * chunk_size)
+	var z_offset = floor(chunk_pos.y * chunk_size)
 
 	for x in chunk_size + 1:
 		vert.x = x + x_offset
@@ -69,6 +69,30 @@ func generate_verts(chunk_pos: Vector2i) -> Array:
 			vertices.push_back(vert)
 
 	return vertices
+
+func calculate_normals(vertices: PackedVector3Array) -> PackedVector3Array:
+	var normals := PackedVector3Array()
+	var sample_distance := 1.0
+
+	for vertex in vertices:
+		var left := vertex + Vector3(-sample_distance, 0, 0)
+		var right := vertex + Vector3(sample_distance, 0, 0)
+		var down := vertex + Vector3(0, 0, -sample_distance)
+		var up := vertex + Vector3(0, 0, sample_distance)
+
+		left.y = get_noise(left)
+		right.y = get_noise(right)
+		down.y = get_noise(down)
+		up.y = get_noise(up)
+
+		var dx := right - left
+		var dz := up - down
+
+		var normal := dz.cross(dx).normalized()
+
+		normals.append(normal)
+
+	return normals
 
 func generate_indices(length) -> Array:
 	var indices := PackedInt32Array()
@@ -92,35 +116,7 @@ func generate_indices(length) -> Array:
 			index + sqrt(length) + 1 # point 3
 		]
 		indices.append_array(triangle2)
-
 	return indices
-
-func calculate_normals(vertices, indices) -> Array:
-	var normals := PackedVector3Array()
-	normals.resize(vertices.size())
-
-	for index in range(0, indices.size(), 3):
-		var index_a = indices[index]
-		var index_b = indices[index + 1]
-		var index_c = indices[index + 2]
-
-		var vertex_A = vertices[index_a]
-		var vertex_B = vertices[index_b]
-		var vertex_C = vertices[index_c]
-
-		var vector_BA = vertex_B - vertex_A
-		var vector_CA = vertex_C - vertex_A
-
-		var face_normal = vector_CA.cross(vector_BA)
-
-		normals[index_a] += face_normal
-		normals[index_b] += face_normal
-		normals[index_c] += face_normal
-
-	for i in normals.size():
-		normals[i] = normals[i].normalized()
-
-	return normals
 
 
 # generating terrain
@@ -128,8 +124,8 @@ func calculate_normals(vertices, indices) -> Array:
 func generate_chunk(chunk_pos: Vector2i) -> void:
 	var arrays := []
 	var vertices: PackedVector3Array = generate_verts(chunk_pos)
+	var normals: PackedVector3Array = calculate_normals(vertices)
 	var indices: PackedInt32Array = generate_indices(vertices.size())
-	var normals: PackedVector3Array = calculate_normals(vertices, indices)
 
 	arrays = []
 	arrays.resize(Mesh.ARRAY_MAX)
@@ -207,10 +203,10 @@ func unload_collisions(player_position: Vector2i) -> void:
 # collector funcs
 
 func update_terrain(player_position: Vector2i) -> void:
-	generate_terrain(player_position)
+	await generate_terrain(player_position)
 	unload_collisions(player_position)
-	generate_collisions(player_position)
 	unload_terrain(player_position)
+	generate_collisions(player_position)
 
 func init_terrain(player_position: Vector2i) -> void:
 	generate_terrain(player_position, true)

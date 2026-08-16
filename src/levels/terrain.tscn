@@ -4,6 +4,5 @@
 
 [node name="Terrain" type="Node3D"]
 script = ExtResource("1_o3ck0")
-render_distance = 50
 terrain_seed = 10
 strength = 10
