@@ -2,7 +2,7 @@
 extends Node3D
 
 @export_category("Chunk Settings")
-@export_range(2, 128, 1) var render_distance := 15:
+@export_range(2, 128, 1) var render_distance := 30:
 	set(value):
 		render_distance = value
 		#generate_terrain()
@@ -35,16 +35,26 @@ extends Node3D
 
 var noise = FastNoiseLite.new()
 var chunk_size = 16
-var collision_chunk_size = 3
+var collision_chunk_size = 5
 var loaded_chunks: PackedVector2Array
 
-func generate_verts(chunk_pos: Vector2i) -> Array:
+
+# noise func
+
+func get_noise(vert: Vector3) -> float:
 	noise.seed = terrain_seed
 	noise.frequency = freq
 	noise.fractal_octaves = octaves
 	noise.fractal_gain = gain
 	noise.fractal_lacunarity = lacunarity
-	
+
+	var height = noise.get_noise_2d(vert.x, vert.z) * strength
+	return height
+
+
+# mesh array funcs
+
+func generate_verts(chunk_pos: Vector2i) -> Array:
 	var vertices := PackedVector3Array()
 	var vert := Vector3(0, 0, 0)
 
@@ -55,10 +65,35 @@ func generate_verts(chunk_pos: Vector2i) -> Array:
 		vert.x = x + x_offset
 		for z in chunk_size + 1:
 			vert.z = z + z_offset
-			vert.y = noise.get_noise_2d(vert.x, vert.z) * strength
+			vert.y = get_noise(vert)
 			vertices.push_back(vert)
 
 	return vertices
+
+func generate_indices(length) -> Array:
+	var indices := PackedInt32Array()
+
+	for index in length:
+		if fmod(index + 1, sqrt(length)) == 0:
+			continue
+		elif index >= length - sqrt(length):
+			break
+			
+		var triangle1 := [
+			index + sqrt(length), # point 1
+			index + 1, # point 2
+			index # point 3
+		]
+		indices.append_array(triangle1)
+
+		var triangle2 := [
+			index + 1, # point 1
+			index + sqrt(length), # point 2
+			index + sqrt(length) + 1 # point 3
+		]
+		indices.append_array(triangle2)
+
+	return indices
 
 func calculate_normals(vertices, indices) -> Array:
 	var normals := PackedVector3Array()
@@ -87,36 +122,10 @@ func calculate_normals(vertices, indices) -> Array:
 
 	return normals
 
-func generate_indices(length) -> Array:
-	var indices := PackedInt32Array()
 
-	for index in length:
-		if fmod(index + 1, sqrt(length)) == 0:
-			continue
-		elif index >= length - sqrt(length):
-			break
-			
-		var triangle1 := [
-			index + sqrt(length), # point 1
-			index + 1, # point 2
-			index # point 3
-		]
-		indices.append_array(triangle1)
+# generating terrain
 
-		var triangle2 := [
-			index + 1, # point 1
-			index + sqrt(length), # point 2
-			index + sqrt(length) + 1 # point 3
-		]
-		indices.append_array(triangle2)
-
-	return indices
-
-func generate_chunk(chunk_pos: Vector2i, collision: bool) -> void:
-	for child in get_children():
-		if child.name.contains("chunk_pos_%s_%s" % [chunk_pos.x, chunk_pos.y]):
-			child.free()
-
+func generate_chunk(chunk_pos: Vector2i) -> void:
 	var arrays := []
 	var vertices: PackedVector3Array = generate_verts(chunk_pos)
 	var indices: PackedInt32Array = generate_indices(vertices.size())
@@ -137,47 +146,82 @@ func generate_chunk(chunk_pos: Vector2i, collision: bool) -> void:
 
 	add_child(terrain)
 
-	if collision:
-		terrain.create_trimesh_collision()
-
-func generate_terrain(player_coord: Vector2i) -> void:
-	# collision handler
-	for child in get_children():
-		if child.get_child_count(true) == 0:
-			continue
-		else:
-			var child_name_array = child.name.split("_")
-			var child_x: int = int(child_name_array[2])
-			var child_y: int = int(child_name_array[3])
-			print(child_x, child_y)
-			
-			if abs(player_coord.x - child_x) > collision_chunk_size or abs(player_coord.y - child_y) > collision_chunk_size:
-				child.free()
-				loaded_chunks.erase(Vector2(child_x, child_y))
-
+func generate_terrain(player_position: Vector2i, init: bool = false) -> void:
 	var chunk: Vector2i
-	var collision: bool
-	for chunk_x in range(player_coord.x - render_distance, player_coord.x + render_distance + 1):
+	for chunk_x in range(player_position.x - render_distance, player_position.x + render_distance + 1):
 		chunk.x = chunk_x
-		for chunk_y in range(player_coord.y - render_distance, player_coord.y + render_distance + 1):
+		for chunk_y in range(player_position.y - render_distance, player_position.y + render_distance + 1):
 			chunk.y = chunk_y
 			if loaded_chunks.has(chunk):
 				continue
-			
-			if (abs(player_coord.x - chunk.x) < collision_chunk_size and abs(player_coord.y - chunk.y) < collision_chunk_size):
-				collision = true
-			else:
-				collision = false
-			generate_chunk(chunk, collision)
+			generate_chunk(chunk)
 
 			loaded_chunks.append(chunk)
 
-			await get_tree().process_frame
+			if init:
+				continue
+			else:
+				await get_tree().process_frame
 
+func generate_collisions(player_position: Vector2i) -> void:
+	var collision_chunks: PackedVector2Array
+	var collision_chunk: Vector2i
+	for chunk_x in range(player_position.x - collision_chunk_size, player_position.x + collision_chunk_size + 1, 1):
+		for chunk_y in range(player_position.y - collision_chunk_size, player_position.y + collision_chunk_size + 1, 1):
+			collision_chunk = Vector2i(chunk_x, chunk_y)
+			collision_chunks.push_back(collision_chunk)
+
+	for chunk in collision_chunks:
+		var terrain: MeshInstance3D = get_node("chunk_pos_%s_%s" % [int(chunk.x), int(chunk.y)])
+		terrain.create_trimesh_collision()
+
+
+# unloading terrain
+
+func unload_terrain(player_position: Vector2i) -> void:
+	var chunk: Vector2i
+	for child in get_children():
+		var child_name_array = child.name.split("_")
+		chunk.x = int(child_name_array[2])
+		chunk.y = int(child_name_array[3])
+
+		if abs(player_position.x - chunk.x) > render_distance or abs(player_position.y - chunk.y) > render_distance:
+			child.queue_free()
+			loaded_chunks.erase(chunk)
+	
+func unload_collisions(player_position: Vector2i) -> void:
+	var chunk: Vector2i
+	for child in get_children():
+		if child.get_child_count() == 0:
+			continue
+		else:
+			var child_name_array = child.name.split("_")
+			chunk.x = int(child_name_array[2])
+			chunk.y = int(child_name_array[3])
+
+			if abs(player_position.x - chunk.x) > collision_chunk_size or abs(player_position.y - chunk.y) > collision_chunk_size:
+				for childs_child in child.get_children():
+					childs_child.queue_free()
+
+
+# collector funcs
+
+func update_terrain(player_position: Vector2i) -> void:
+	generate_terrain(player_position)
+	unload_collisions(player_position)
+	generate_collisions(player_position)
+	unload_terrain(player_position)
+
+func init_terrain(player_position: Vector2i) -> void:
+	generate_terrain(player_position, true)
+	generate_collisions(player_position)
+
+
+# caller func
 func _on_player_moved(player_position: Vector2i) -> void:
 	print(player_position)
-	generate_terrain(player_position)
+	update_terrain(player_position)
 
 func _ready() -> void:
-	generate_terrain(Vector2i(0, 0))
 	EventListener.player_chunk_changed.connect(_on_player_moved)
+	init_terrain(Vector2i(0, 0))
