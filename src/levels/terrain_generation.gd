@@ -6,6 +6,8 @@ extends Node3D
 	set(value):
 		render_distance = value
 		#generate_terrain()
+@export_color_no_alpha var colour := Color(0.5, 0.5, 0.5)
+
 
 @export_category("Terrain Settings")
 @export var terrain_seed := randi():
@@ -70,7 +72,7 @@ func generate_verts(chunk_pos: Vector2i) -> Array:
 
 	return vertices
 
-func calculate_normals(vertices: PackedVector3Array) -> PackedVector3Array:
+func generate_normals(vertices: PackedVector3Array) -> PackedVector3Array:
 	var normals := PackedVector3Array()
 	normals.resize(vertices.size())
 
@@ -145,7 +147,7 @@ func calculate_normals(vertices: PackedVector3Array) -> PackedVector3Array:
 
 	return normals
 
-func generate_indices(length) -> Array:
+func generate_indices(length: int) -> Array:
 	var indices := PackedInt32Array()
 
 	for index in length:
@@ -169,26 +171,39 @@ func generate_indices(length) -> Array:
 		indices.append_array(triangle2)
 	return indices
 
+func generate_colours(length: int) -> PackedColorArray:
+	var colours := PackedColorArray()
+	for vert in length:
+		colours.append(colour)
+
+	return colours
 
 # generating terrain
 
 func generate_chunk(chunk_pos: Vector2i) -> void:
 	var arrays := []
 	var vertices: PackedVector3Array = generate_verts(chunk_pos)
+	var normals: PackedVector3Array = generate_normals(vertices)
 	var indices: PackedInt32Array = generate_indices(vertices.size())
-	var normals: PackedVector3Array = calculate_normals(vertices)
+	# var colours: PackedColorArray = generate_colours(vertices.size())
 
 	arrays = []
 	arrays.resize(Mesh.ARRAY_MAX)
 	arrays[Mesh.ARRAY_VERTEX] = vertices
 	arrays[Mesh.ARRAY_NORMAL] = normals
 	arrays[Mesh.ARRAY_INDEX] = indices
+	# arrays[Mesh.ARRAY_COLOR] = colours
 
 	var arr_mesh := ArrayMesh.new()
 	arr_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 
 	var terrain := MeshInstance3D.new()
 	terrain.mesh = arr_mesh
+
+	var material := StandardMaterial3D.new()
+	material.albedo_color = colour
+	terrain.material_override = material
+
 	terrain.name = "chunk_pos_%s_%s" % [chunk_pos.x, chunk_pos.y]
 
 	add_child(terrain)
@@ -229,12 +244,13 @@ func unload_terrain(player_position: Vector2i) -> void:
 	var chunk: Vector2i
 	for child in get_children():
 		var child_name_array = child.name.split("_")
-		chunk.x = int(child_name_array[2])
-		chunk.y = int(child_name_array[3])
+		if len(child_name_array) < 2:
+			chunk.x = int(child_name_array[2])
+			chunk.y = int(child_name_array[3])
 
-		if abs(player_position.x - chunk.x) > render_distance or abs(player_position.y - chunk.y) > render_distance:
-			child.queue_free()
-			loaded_chunks.erase(chunk)
+			if abs(player_position.x - chunk.x) > render_distance or abs(player_position.y - chunk.y) > render_distance:
+				child.queue_free()
+				loaded_chunks.erase(chunk)
 	
 func unload_collisions(player_position: Vector2i) -> void:
 	var chunk: Vector2i
@@ -254,10 +270,10 @@ func unload_collisions(player_position: Vector2i) -> void:
 # collector funcs
 
 func update_terrain(player_position: Vector2i) -> void:
-	await generate_terrain(player_position)
+	generate_collisions(player_position)
+	generate_terrain(player_position)
 	unload_collisions(player_position)
 	unload_terrain(player_position)
-	generate_collisions(player_position)
 
 func init_terrain(player_position: Vector2i) -> void:
 	generate_terrain(player_position, true)
