@@ -14,9 +14,12 @@ background_mode = 2
 sky = SubResource("Sky_ibp4d")
 ambient_light_source = 3
 tonemap_mode = 2
-ssao_intensity = 3.76
-ssao_power = 0.2745179
-ssao_detail = 1.0
+ssao_enabled = true
+ssao_radius = 16.0
+ssao_intensity = 0.95
+ssao_power = 8.485309
+ssao_detail = 0.0
+ssao_horizon = 0.07
 ssao_sharpness = 1.0
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.01
@@ -33,23 +36,24 @@ volumetric_fog_length = 200.0
 [node name="EntityRoot" type="Node3D" parent="World"]
 
 [node name="Player" parent="World/EntityRoot" instance=ExtResource("1_3fed5")]
-transform = Transform3D(0.92265934, 0, 0.3856162, 0, 1, 0, -0.3856162, 0, 0.92265934, 1.8622651, 1.8285775, 4.426429)
+transform = Transform3D(-0.8413128, 0, -0.5405486, 0, 1, 0, 0.5405486, 0, -0.8413128, 8.146065, 3.8198423, 7.7818136)
 
 [node name="EffectRoot" type="Node3D" parent="World"]
 
 [node name="LevelRoot" type="Node3D" parent="World"]
 
 [node name="Terrain" parent="World/LevelRoot" instance=ExtResource("2_6yl8a")]
-chunk_size = 16
-chunks = 16
-size = 265
+render_distance = 15
+colour = Color(0.7601228, 0.30132538, 0.23868337, 1)
+octaves = 8
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="World/LevelRoot"]
 environment = SubResource("Environment_6n4xl")
 camera_attributes = SubResource("CameraAttributesPractical_6n4xl")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="World/LevelRoot"]
-transform = Transform3D(-0.8704731, 0.20013651, -0.44969106, -0.019565169, 0.89881426, 0.43789288, 0.49182707, 0.38997224, -0.7784779, 0, 3.9338326, 0)
+transform = Transform3D(-0.8704731, 0.20013651, -0.44969106, -0.019565169, 0.89881426, 0.4378929, 0.49182707, 0.38997224, -0.7784779, 0, 26.566935, 0)
+light_color = Color(0.9256858, 0.8582453, 0.7926851, 1)
 shadow_enabled = true
 
 [node name="HudLayer" type="CanvasLayer" parent="."]

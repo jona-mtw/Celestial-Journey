@@ -5,7 +5,7 @@ extends SpringArm3D
 
 @export var sensitivity: float = 0.005
 @export var min_zoom: float = 0.0
-@export var max_zoom: float = 20.0
+@export var max_zoom: float = 50.0
 @export var zoom_step = 3
 @export var zoom_speed = 5
 

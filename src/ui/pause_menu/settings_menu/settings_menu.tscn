@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://d0s51w4dkd70s"]
 
 [ext_resource type="FontFile" uid="uid://dgrneunmlbbp2" path="res://assets/ui/fonts/RobotoCondensed-VariableFont_wght.ttf" id="1_e368d"]
-[ext_resource type="Script" uid="uid://dsjr338g3f3ch" path="res://src/ui/pause_menu/settings/settings.gd" id="1_mlobj"]
+[ext_resource type="Script" uid="uid://dhkbe210y8e7x" path="res://src/ui/pause_menu/settings_menu/settings_menu.gd" id="1_jnwta"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e368d"]
 content_margin_left = 0.0
@@ -63,8 +63,8 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 corner_detail = 5
 
-[node name="Settings" type="CanvasLayer"]
-script = ExtResource("1_mlobj")
+[node name="SettingsMenu" type="CanvasLayer"]
+script = ExtResource("1_jnwta")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_right = 1920.0
