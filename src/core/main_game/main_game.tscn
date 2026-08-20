@@ -43,7 +43,6 @@ transform = Transform3D(-0.8413128, 0, -0.5405486, 0, 1, 0, 0.5405486, 0, -0.841
 [node name="LevelRoot" type="Node3D" parent="World"]
 
 [node name="Terrain" parent="World/LevelRoot" instance=ExtResource("2_6yl8a")]
-render_distance = 15
 colour = Color(0.7601228, 0.30132538, 0.23868337, 1)
 octaves = 8
 
@@ -65,13 +64,6 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="PauseLayer" type="CanvasLayer" parent="."]
-process_mode = 3
-layer = 20
-
-[node name="PauseMenu" parent="PauseLayer" instance=ExtResource("3_6n4xl")]
-visible = false
-
 [node name="TransitionLayer" type="CanvasLayer" parent="."]
 layer = 100
 
@@ -89,3 +81,8 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="PauseMenu" parent="." instance=ExtResource("3_6n4xl")]
+process_mode = 2
+layer = 20
+visible = false

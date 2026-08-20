@@ -178,6 +178,7 @@ func generate_colours(length: int) -> PackedColorArray:
 
 	return colours
 
+
 # generating terrain
 
 func generate_chunk(chunk_pos: Vector2i) -> void:
@@ -244,7 +245,7 @@ func unload_terrain(player_position: Vector2i) -> void:
 	var chunk: Vector2i
 	for child in get_children():
 		var child_name_array = child.name.split("_")
-		if len(child_name_array) < 2:
+		if len(child_name_array) > 2:
 			chunk.x = int(child_name_array[2])
 			chunk.y = int(child_name_array[3])
 
@@ -276,7 +277,7 @@ func update_terrain(player_position: Vector2i) -> void:
 	unload_terrain(player_position)
 
 func init_terrain(player_position: Vector2i) -> void:
-	generate_terrain(player_position, true)
+	await generate_terrain(player_position, true)
 	generate_collisions(player_position)
 
 

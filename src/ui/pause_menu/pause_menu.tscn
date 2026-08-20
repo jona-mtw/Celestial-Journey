@@ -2,7 +2,7 @@
 
 [ext_resource type="FontFile" uid="uid://dgrneunmlbbp2" path="res://assets/ui/fonts/RobotoCondensed-VariableFont_wght.ttf" id="1_fsbbv"]
 [ext_resource type="Script" uid="uid://c1rx7etgeg4ha" path="res://src/ui/pause_menu/pause_menu.gd" id="1_u4p1g"]
-[ext_resource type="PackedScene" uid="uid://d0s51w4dkd70s" path="res://src/ui/pause_menu/settings_menu/settings_menu.tscn" id="3_kqx3l"]
+[ext_resource type="PackedScene" uid="uid://d0s51w4dkd70s" path="res://src/ui/settings_menu/settings_menu.tscn" id="3_kqx3l"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u4p1g"]
 content_margin_left = 4.0

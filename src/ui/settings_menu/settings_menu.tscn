@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://d0s51w4dkd70s"]
 
 [ext_resource type="FontFile" uid="uid://dgrneunmlbbp2" path="res://assets/ui/fonts/RobotoCondensed-VariableFont_wght.ttf" id="1_e368d"]
-[ext_resource type="Script" uid="uid://dhkbe210y8e7x" path="res://src/ui/pause_menu/settings_menu/settings_menu.gd" id="1_jnwta"]
+[ext_resource type="Script" uid="uid://dhkbe210y8e7x" path="res://src/ui/settings_menu/settings_menu.gd" id="1_jnwta"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e368d"]
 content_margin_left = 0.0
@@ -79,10 +79,10 @@ offset_bottom = 904.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_e368d")
 
 [node name="SettingsLabel" type="Label" parent="."]
-offset_left = 376.0
-offset_top = 194.0
-offset_right = 538.0
-offset_bottom = 242.0
+offset_left = 392.0
+offset_top = 199.0
+offset_right = 554.0
+offset_bottom = 247.0
 theme_override_fonts/font = ExtResource("1_e368d")
 theme_override_font_sizes/font_size = 40
 text = "SETTINGS"
