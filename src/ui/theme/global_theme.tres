@@ -56,44 +56,42 @@ draw_center = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jk7a8"]
 content_margin_left = 10.0
-content_margin_top = 3.0
+content_margin_top = 4.0
 content_margin_right = 10.0
 content_margin_bottom = 3.0
-bg_color = Color(0.06666667, 0.078431375, 0.10980392, 0.7019608)
-border_width_top = 10
-border_color = Color(0.24500002, 0.33600006, 0.7, 1)
-border_blend = true
+bg_color = Color(0.05490196, 0.14117648, 0.19215687, 1)
+border_width_top = 3
+border_color = Color(0.28235295, 0.5529412, 0.60784316, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_khhjx"]
 content_margin_left = 10.0
-content_margin_top = 3.0
+content_margin_top = 4.0
 content_margin_right = 10.0
 content_margin_bottom = 3.0
-bg_color = Color(0.06666667, 0.078431375, 0.10980392, 0.7019608)
-border_width_top = 7
-border_color = Color(0.24880826, 0.316647, 0.5907488, 1)
-border_blend = true
+bg_color = Color(0.17860001, 0.30951002, 0.38, 0.9372549)
+border_width_top = 3
+border_color = Color(0.23921569, 0.49019608, 0.63529414, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6w0ku"]
 content_margin_left = 10.0
-content_margin_top = 3.0
+content_margin_top = 4.0
 content_margin_right = 10.0
 content_margin_bottom = 3.0
 bg_color = Color(0.06666667, 0.078431375, 0.10980392, 0.7019608)
-border_width_top = 5
-border_color = Color(0.12611908, 0.168331, 0.33988824, 1)
-border_blend = true
+border_width_top = 3
+border_color = Color(0.12156863, 0.28627452, 0.38039216, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_puntf"]
 content_margin_left = 0.0
-bg_color = Color(0.231, 0.25739998, 0.33, 0.37254903)
-corner_radius_top_left = 5
+content_margin_top = 10.0
+bg_color = Color(0.121599995, 0.28525335, 0.38, 0.16862746)
+corner_radius_top_left = 10
 corner_radius_top_right = 5
 
 [resource]
@@ -107,6 +105,7 @@ Button/styles/pressed = SubResource("StyleBoxFlat_ul0o6")
 Label/font_sizes/font_size = 40
 Label/fonts/font = ExtResource("1_em35s")
 Panel/styles/panel = SubResource("StyleBoxFlat_800e1")
+TabContainer/constants/side_margin = 0
 TabContainer/constants/tab_separation = 3
 TabContainer/font_sizes/font_size = 35
 TabContainer/fonts/font = ExtResource("1_em35s")
