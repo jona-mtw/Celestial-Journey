@@ -1,59 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://dmqh1a0jy1fwr"]
+[gd_scene load_steps=4 format=3 uid="uid://dmqh1a0jy1fwr"]
 
-[ext_resource type="FontFile" uid="uid://dgrneunmlbbp2" path="res://assets/ui/fonts/RobotoCondensed-VariableFont_wght.ttf" id="1_fsbbv"]
 [ext_resource type="Script" uid="uid://c1rx7etgeg4ha" path="res://src/ui/pause_menu/pause_menu.gd" id="1_u4p1g"]
+[ext_resource type="Theme" uid="uid://bsm4qh1o5r875" path="res://src/ui/theme/global_theme.tres" id="3_j7lcx"]
 [ext_resource type="PackedScene" uid="uid://d0s51w4dkd70s" path="res://src/ui/settings_menu/settings_menu.tscn" id="3_kqx3l"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u4p1g"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0.015686275, 0.047058824, 0.06666667, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.121599995, 0.28525335, 0.38, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-corner_detail = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kqx3l"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0.05490196, 0.14117648, 0.19215687, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.28235295, 0.5529412, 0.60784316, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-corner_detail = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j7lcx"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0.015686275, 0.039215688, 0.05882353, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.09758637, 0.13072959, 0.15709502, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-corner_detail = 5
 
 [node name="PauseMenu" type="CanvasLayer"]
 script = ExtResource("1_u4p1g")
@@ -68,8 +17,7 @@ offset_left = 848.0
 offset_top = 405.0
 offset_right = 1060.0
 offset_bottom = 453.0
-theme_override_fonts/font = ExtResource("1_fsbbv")
-theme_override_font_sizes/font_size = 40
+theme = ExtResource("3_j7lcx")
 text = "PAUSE MENU"
 
 [node name="ResumeButton" type="Button" parent="."]
@@ -77,12 +25,7 @@ offset_left = 816.0
 offset_top = 520.0
 offset_right = 1104.0
 offset_bottom = 574.0
-theme_override_colors/font_hover_color = Color(0.874571, 0.97546726, 0.9539413, 1)
-theme_override_fonts/font = ExtResource("1_fsbbv")
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StyleBoxFlat_u4p1g")
-theme_override_styles/hover = SubResource("StyleBoxFlat_kqx3l")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_j7lcx")
+theme = ExtResource("3_j7lcx")
 text = "RESUME"
 
 [node name="SettingsButton" type="Button" parent="."]
@@ -90,12 +33,7 @@ offset_left = 816.0
 offset_top = 600.0
 offset_right = 1104.0
 offset_bottom = 654.0
-theme_override_colors/font_hover_color = Color(0.874571, 0.97546726, 0.9539413, 1)
-theme_override_fonts/font = ExtResource("1_fsbbv")
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StyleBoxFlat_u4p1g")
-theme_override_styles/hover = SubResource("StyleBoxFlat_kqx3l")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_j7lcx")
+theme = ExtResource("3_j7lcx")
 text = "SETTINGS"
 
 [node name="MainMenuButton" type="Button" parent="."]
@@ -103,12 +41,7 @@ offset_left = 816.0
 offset_top = 680.0
 offset_right = 1104.0
 offset_bottom = 734.0
-theme_override_colors/font_hover_color = Color(0.874571, 0.97546726, 0.9539413, 1)
-theme_override_fonts/font = ExtResource("1_fsbbv")
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StyleBoxFlat_u4p1g")
-theme_override_styles/hover = SubResource("StyleBoxFlat_kqx3l")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_j7lcx")
+theme = ExtResource("3_j7lcx")
 text = "MAIN MENU
 "
 
@@ -120,12 +53,7 @@ offset_left = 816.0
 offset_top = 760.0
 offset_right = 1104.0
 offset_bottom = 814.0
-theme_override_colors/font_hover_color = Color(0.874571, 0.97546726, 0.9539413, 1)
-theme_override_fonts/font = ExtResource("1_fsbbv")
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StyleBoxFlat_u4p1g")
-theme_override_styles/hover = SubResource("StyleBoxFlat_kqx3l")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_j7lcx")
+theme = ExtResource("3_j7lcx")
 text = "QUIT
 "
 

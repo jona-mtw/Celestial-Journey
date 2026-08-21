@@ -1,19 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://d0s51w4dkd70s"]
+[gd_scene load_steps=8 format=3 uid="uid://d0s51w4dkd70s"]
 
 [ext_resource type="FontFile" uid="uid://dgrneunmlbbp2" path="res://assets/ui/fonts/RobotoCondensed-VariableFont_wght.ttf" id="1_e368d"]
 [ext_resource type="Script" uid="uid://dhkbe210y8e7x" path="res://src/ui/settings_menu/settings_menu.gd" id="1_jnwta"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e368d"]
-content_margin_left = 0.0
-content_margin_top = 0.0
-content_margin_right = 0.0
-content_margin_bottom = 0.0
-bg_color = Color(0.06666667, 0.078431375, 0.10980392, 0.7019608)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-corner_detail = 5
+[ext_resource type="Theme" uid="uid://bsm4qh1o5r875" path="res://src/ui/theme/global_theme.tres" id="2_kktd5"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o525x"]
 content_margin_left = 4.0
@@ -46,21 +35,28 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 corner_detail = 5
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0yd4y"]
-content_margin_left = 4.0
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_axtgf"]
+content_margin_left = 10.0
 content_margin_top = 4.0
-content_margin_right = 4.0
+content_margin_right = 10.0
 content_margin_bottom = 4.0
-bg_color = Color(0.015686275, 0.039215688, 0.05882353, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.09758637, 0.13072959, 0.15709502, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+bg_color = Color(0.06666667, 0.078431375, 0.10980392, 0.7019608)
+border_width_left = 1
+border_width_right = 1
+border_color = Color(0.175, 0.175, 0.175, 1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kktd5"]
+content_margin_left = 10.0
+content_margin_top = 4.0
+content_margin_right = 10.0
+content_margin_bottom = 4.0
+bg_color = Color(0.06666667, 0.078431375, 0.10980392, 0.7019608)
+border_width_top = 2
+border_color = Color(0.21924964, 0.2811814, 0.533007, 1)
+border_blend = true
+corner_radius_top_left = 10
+corner_radius_top_right = 10
 corner_detail = 5
 
 [node name="SettingsMenu" type="CanvasLayer"]
@@ -73,18 +69,17 @@ color = Color(0.09, 0.09, 0.09, 0.7372549)
 
 [node name="SettingsBackground" type="Panel" parent="."]
 offset_left = 360.0
-offset_top = 176.0
+offset_top = 262.0
 offset_right = 1543.0
 offset_bottom = 904.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_e368d")
+theme = ExtResource("2_kktd5")
 
 [node name="SettingsLabel" type="Label" parent="."]
-offset_left = 392.0
-offset_top = 199.0
-offset_right = 554.0
-offset_bottom = 247.0
-theme_override_fonts/font = ExtResource("1_e368d")
-theme_override_font_sizes/font_size = 40
+offset_left = 364.0
+offset_top = 207.0
+offset_right = 526.0
+offset_bottom = 255.0
+theme = ExtResource("2_kktd5")
 text = "SETTINGS"
 
 [node name="BackButton" type="Button" parent="."]
@@ -92,12 +87,100 @@ offset_left = 360.0
 offset_top = 849.0
 offset_right = 538.0
 offset_bottom = 903.0
-theme_override_colors/font_hover_color = Color(0.874571, 0.97546726, 0.9539413, 1)
-theme_override_fonts/font = ExtResource("1_e368d")
+theme = ExtResource("2_kktd5")
 theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_o525x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_yflst")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_0yd4y")
 text = "⬅️  BACK "
+
+[node name="TabBar" type="TabBar" parent="."]
+offset_left = 830.0
+offset_top = 200.0
+offset_right = 1545.0
+offset_bottom = 256.0
+theme_override_fonts/font = ExtResource("1_e368d")
+theme_override_font_sizes/font_size = 35
+theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_axtgf")
+theme_override_styles/tab_selected = SubResource("StyleBoxFlat_kktd5")
+current_tab = 0
+close_with_middle_mouse = false
+tab_count = 5
+tab_0/title = "GENERATION"
+tab_1/title = "CONTROLS"
+tab_2/title = "VIDEO"
+tab_3/title = "AUDIO"
+tab_4/title = "ABOUT"
+
+[node name="GenerationSettings" type="CanvasLayer" parent="TabBar"]
+visible = false
+
+[node name="Title" type="Label" parent="TabBar/GenerationSettings"]
+offset_left = 381.0
+offset_top = 278.0
+offset_right = 564.0
+offset_bottom = 320.0
+theme_override_fonts/font = ExtResource("1_e368d")
+theme_override_font_sizes/font_size = 35
+text = "GENERATION"
+
+[node name="GenerationSettingsAdvanced" type="CanvasLayer" parent="TabBar"]
+visible = false
+
+[node name="Title" type="Label" parent="TabBar/GenerationSettingsAdvanced"]
+offset_left = 381.0
+offset_top = 278.0
+offset_right = 564.0
+offset_bottom = 320.0
+theme_override_fonts/font = ExtResource("1_e368d")
+theme_override_font_sizes/font_size = 35
+text = "GENERATION"
+
+[node name="Controls" type="CanvasLayer" parent="TabBar"]
+visible = false
+
+[node name="Title" type="Label" parent="TabBar/Controls"]
+offset_left = 381.0
+offset_top = 278.0
+offset_right = 536.0
+offset_bottom = 320.0
+theme_override_fonts/font = ExtResource("1_e368d")
+theme_override_font_sizes/font_size = 35
+text = "CONTROLS"
+
+[node name="VideoSettings" type="CanvasLayer" parent="TabBar"]
+visible = false
+
+[node name="Title" type="Label" parent="TabBar/VideoSettings"]
+offset_left = 381.0
+offset_top = 278.0
+offset_right = 536.0
+offset_bottom = 320.0
+theme_override_fonts/font = ExtResource("1_e368d")
+theme_override_font_sizes/font_size = 35
+text = "VIDEO SETTINGS"
+
+[node name="AudioSettings" type="CanvasLayer" parent="TabBar"]
+visible = false
+
+[node name="Title" type="Label" parent="TabBar/AudioSettings"]
+offset_left = 381.0
+offset_top = 278.0
+offset_right = 536.0
+offset_bottom = 320.0
+theme_override_fonts/font = ExtResource("1_e368d")
+theme_override_font_sizes/font_size = 35
+text = "AUDIO SETTINGS"
+
+[node name="About" type="CanvasLayer" parent="TabBar"]
+visible = false
+
+[node name="Title" type="Label" parent="TabBar/About"]
+offset_left = 381.0
+offset_top = 278.0
+offset_right = 479.0
+offset_bottom = 320.0
+theme_override_fonts/font = ExtResource("1_e368d")
+theme_override_font_sizes/font_size = 35
+text = "ABOUT"
 
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

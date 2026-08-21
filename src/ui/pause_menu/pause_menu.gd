@@ -6,7 +6,6 @@ func _ready() -> void:
 
 func escape_key_pressed() -> void:
 	if $SettingsMenu.visible:
-		print("hooray")
 		$SettingsMenu._on_back_button_pressed()
 	else:
 		get_tree().paused = !get_tree().paused
