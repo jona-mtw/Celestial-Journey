@@ -2,6 +2,7 @@ extends CharacterBody3D
 
 const SPEED: float = 5
 const JUMP_VELOCITY: float = 4.5
+@onready var animation_player = $player_model/AnimationPlayer
 
 var coord: Vector2i
 func get_chunk_from_position(player_position: Vector3):
@@ -24,6 +25,9 @@ func _physics_process(delta: float) -> void:
 		
 	if Input.is_action_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
+
+	if is_on_floor() and velocity != Vector3.ZERO:
+		animation_player.play("ArmatureAction")
 
 	var input_dir: Vector2 = Input.get_vector("left", "right", "forward", "back")
 	var direction: Vector3 = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
