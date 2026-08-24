@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-const SPEED: float = 5
+const SPEED: float = 2
 const JUMP_VELOCITY: float = 4.5
 @onready var animation_player = $player_model/AnimationPlayer
 
@@ -22,12 +22,14 @@ func _physics_process(delta: float) -> void:
 
 	if not is_on_floor():
 		velocity += get_gravity() * delta
-		
+
 	if Input.is_action_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
 	if is_on_floor() and velocity != Vector3.ZERO:
-		animation_player.play("ArmatureAction")
+		animation_player.play("Walk")
+	elif is_on_floor():
+		animation_player.play("Idle1")
 
 	var input_dir: Vector2 = Input.get_vector("left", "right", "forward", "back")
 	var direction: Vector3 = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()

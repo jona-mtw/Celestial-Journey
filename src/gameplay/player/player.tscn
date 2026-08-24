@@ -5,8 +5,8 @@
 [ext_resource type="Script" uid="uid://bu6jn8bq4wggh" path="res://src/gameplay/player/camera.gd" id="2_k2146"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_64h4j"]
-radius = 0.507
-height = 2.7045546
+radius = 0.3232422
+height = 2.4581866
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_kh5p4"]
 radius = 0.2
@@ -16,11 +16,11 @@ collision_layer = 2
 script = ExtResource("1_64h4j")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(0.9993537, 0, 0.035946038, 0, 1, 0, -0.035946038, 0, 0.9993537, 0, 1.347624, 0)
+transform = Transform3D(0.9993537, 0, 0.035946038, 0, 1, 0, -0.035946038, 0, 0.9993537, 0, 1.2318119, 0)
 shape = SubResource("CapsuleShape3D_64h4j")
 
 [node name="CameraPivot" type="SpringArm3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1570556, -0.41428757)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0812275, -0.07062584)
 shape = SubResource("SphereShape3D_kh5p4")
 spring_length = 10.0
 margin = 0.2
@@ -29,4 +29,4 @@ script = ExtResource("2_k2146")
 [node name="Camera" type="Camera3D" parent="CameraPivot"]
 
 [node name="player_model" parent="." instance=ExtResource("1_kh5p4")]
-transform = Transform3D(-0.4, 0, -3.4969112e-08, 0, 0.4, 0, 3.4969112e-08, 0, -0.4, 0, 1.2897315, 0)
+transform = Transform3D(-0.4, 0, -6.039832e-08, 0, 0.4, 0, 6.039832e-08, 0, -0.4, 0, 1.1629088, -0.07062584)

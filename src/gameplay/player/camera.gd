@@ -14,6 +14,7 @@ extends SpringArm3D
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		if Input.is_action_pressed("right_click"):
+			print(rotation.y)
 			rotation.y -= event.relative.x * sensitivity
 		else:
 			player.rotation.y -= event.relative.x * sensitivity
@@ -24,10 +25,10 @@ func _input(event: InputEvent) -> void:
 		target_zoom = clamp(target_zoom - zoom_step, min_zoom, max_zoom)
 	if event.is_action_pressed("mouse_wheel_down"):
 		target_zoom = clamp(target_zoom + zoom_step, min_zoom, max_zoom)
+	
 
-	if event.is_action_released("right_click"):
-		rotation.y = 0
-
-		
 func _process(delta: float) -> void:
 	spring_length = lerp(spring_length, target_zoom, zoom_speed * delta)
+
+	if not Input.is_action_pressed("right_click"):
+		rotation.y = lerp_angle(rotation.y, 0.0, delta * 5)

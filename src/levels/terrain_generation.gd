@@ -2,7 +2,7 @@
 extends Node3D
 
 @export_category("Chunk Settings")
-@export_range(2, 128, 1) var render_distance := 5:
+@export_range(2, 128, 1) var render_distance := 30:
 	set(value):
 		render_distance = value
 		#generate_terrain()
