@@ -4,17 +4,13 @@
 
 ## Player Model
 
-Finally finished the player model, which is all textured, rigged and animated with walking, running, jumping floating and falling animations. Despite doing 3D modelling before, I've never actually rigged anything myself. I have used rigs before on a pre-made Steve (from Minecraft) model, but I didn't make all the bones myself, I just rotated the bones on certain keyframes. For my player model, I added the bones, parented them, weight painted and then moved them to make animations.
+I finished with texturing, rigging and weight painting. :partyparrot:
+Next Step is to make the walking and jumping animations.
 
 
-## Finished the settings menu
+## Worked on the settings menu
 
-It's now functional, with it being possible to change the various terrain generation settings, with an added advanced settings mode where you can actually change every single variable used to generate the terrain. With the settings menu also came....
-
-
-## The main menu!!
-
-I added a main menu, which a background that I made in blender, using the player model and a model of the sun.
+I updated the setting menu layout to account for different settings I'll add in the future
 
 
 ## Stupid Bugs

@@ -29,4 +29,4 @@ script = ExtResource("2_k2146")
 [node name="Camera" type="Camera3D" parent="CameraPivot"]
 
 [node name="player" parent="." instance=ExtResource("1_kh5p4")]
-transform = Transform3D(-1.7484556e-08, 0, 0.4, 0, 0.4, 0, -0.4, 0, -1.7484556e-08, 0, 1.2897315, 0)
+transform = Transform3D(-0.4, 0, -3.4969112e-08, 0, 0.4, 0, 3.4969112e-08, 0, -0.4, 0, 1.2897315, 0)

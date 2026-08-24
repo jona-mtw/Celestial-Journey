@@ -82,7 +82,9 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="PauseMenu" parent="." instance=ExtResource("3_6n4xl")]
+[node name="PauseLayer" type="CanvasLayer" parent="."]
 process_mode = 2
-layer = 20
+layer = 10
+
+[node name="PauseMenu" parent="PauseLayer" instance=ExtResource("3_6n4xl")]
 visible = false
