@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://dew2j6vtburbv"]
 
 [ext_resource type="Script" uid="uid://mjj5mw58hyrs" path="res://src/gameplay/player/player.gd" id="1_64h4j"]
-[ext_resource type="PackedScene" uid="uid://cgdupwf5f1itd" path="res://assets/art/entities/player/models/player.glb" id="1_kh5p4"]
 [ext_resource type="Script" uid="uid://bu6jn8bq4wggh" path="res://src/gameplay/player/camera.gd" id="2_k2146"]
+[ext_resource type="PackedScene" uid="uid://b6lx5p4wkgtu7" path="res://assets/art/blend/entities/player_model.blend" id="3_k2146"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_64h4j"]
 radius = 0.3232422
@@ -27,6 +27,7 @@ margin = 0.2
 script = ExtResource("2_k2146")
 
 [node name="Camera" type="Camera3D" parent="CameraPivot"]
+near = 0.001
 
-[node name="player_model" parent="." instance=ExtResource("1_kh5p4")]
-transform = Transform3D(-0.4, 0, -6.039832e-08, 0, 0.4, 0, 6.039832e-08, 0, -0.4, 0, 1.1629088, -0.07062584)
+[node name="player_model" parent="." instance=ExtResource("3_k2146")]
+transform = Transform3D(-0.4, 0, -3.4969112e-08, 0, 0.4, 0, 3.4969112e-08, 0, -0.4, 0, 1.1959541, 0)
