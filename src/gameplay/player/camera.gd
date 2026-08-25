@@ -14,7 +14,6 @@ extends SpringArm3D
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		if Input.is_action_pressed("right_click"):
-			print(rotation.y)
 			rotation.y -= event.relative.x * sensitivity
 		else:
 			player.rotation.y -= event.relative.x * sensitivity
