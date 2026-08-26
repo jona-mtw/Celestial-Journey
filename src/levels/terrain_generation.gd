@@ -2,45 +2,22 @@
 extends Node3D
 
 @export_category("Chunk Settings")
-@export_range(2, 128, 1) var render_distance := 30:
-	set(value):
-		render_distance = value
-		#generate_terrain()
+@export_range(2, 128, 1) var render_distance := 30
 @export_color_no_alpha var colour := Color(0.5, 0.5, 0.5)
 
-
-@export_category("Terrain Settings")
-@export var terrain_seed := randi():
-	set(value):
-		terrain_seed = value
-		#generate_terrain()
-@export var freq := 0.01:
-	set(value):
-		freq = value
-		#generate_terrain()
-@export_range(1, 8, 1) var octaves := 5:
-	set(value):
-		octaves = value
-		#generate_terrain()
-@export var gain := 0.5:
-	set(value):
-		gain = value
-		#generate_terrain()
-@export var lacunarity := 2.0:
-	set(value):
-		lacunarity = value
-		#generate_terrain()
-@export var strength := 5:
-	set(value):
-		strength = value
-		#generate_terrain()
-@export var resolution := 2.0
+var terrain_seed := randi()
+var freq := 0.01
+var octaves := 5
+var gain := 0.5
+var lacunarity := 2.0
+var strength := 10
+var resolution := 2.0
 
 var noise = FastNoiseLite.new()
 var chunk_size = 16
 var collision_chunk_size = 3
 var loaded_chunks: PackedVector2Array
-
+var debug_state := false
 
 # noise func
 
@@ -64,9 +41,9 @@ func generate_verts(chunk_pos: Vector2i) -> Array:
 	var x_offset = floor(chunk_pos.x * chunk_size)
 	var z_offset = floor(chunk_pos.y * chunk_size)
 
-	for x in (chunk_size + 1) * resolution:
+	for x in chunk_size * resolution + 1:
 		vert.x = x / resolution + x_offset
-		for z in (chunk_size + 1) * resolution:
+		for z in chunk_size * resolution + 1:
 			vert.z = z / resolution + z_offset
 			vert.y = get_noise(vert)
 			vertices.push_back(vert)
@@ -221,9 +198,9 @@ func generate_terrain(player_position: Vector2i, init: bool = false) -> void:
 			chunk.y = chunk_y
 			if loaded_chunks.has(chunk):
 				continue
-			generate_chunk(chunk)
-
-			loaded_chunks.append(chunk)
+			else:
+				generate_chunk(chunk)
+				loaded_chunks.append(chunk)
 
 			if init:
 				continue
@@ -240,7 +217,7 @@ func generate_collisions(player_position: Vector2i) -> void:
 
 	for chunk in collision_chunks:
 		var terrain: MeshInstance3D = get_node("chunk_pos_%s_%s" % [int(chunk.x), int(chunk.y)])
-		if terrain:
+		if terrain and terrain.get_child_count() == 0:
 			terrain.create_trimesh_collision()
 
 
@@ -257,7 +234,7 @@ func unload_terrain(player_position: Vector2i) -> void:
 			if abs(player_position.x - chunk.x) > render_distance or abs(player_position.y - chunk.y) > render_distance:
 				child.queue_free()
 				loaded_chunks.erase(chunk)
-	
+
 func unload_collisions(player_position: Vector2i) -> void:
 	var chunk: Vector2i
 	for child in get_children():
@@ -265,12 +242,79 @@ func unload_collisions(player_position: Vector2i) -> void:
 			continue
 		else:
 			var child_name_array = child.name.split("_")
-			chunk.x = int(child_name_array[2])
-			chunk.y = int(child_name_array[3])
+			if child_name_array.size() < 2:
+				continue
+			else:
+				chunk.x = int(child_name_array[2])
+				chunk.y = int(child_name_array[3])
 
 			if abs(player_position.x - chunk.x) > collision_chunk_size or abs(player_position.y - chunk.y) > collision_chunk_size:
 				for childs_child in child.get_children():
 					childs_child.queue_free()
+
+
+# debug
+
+func debug_terrain(player_position: Vector2i) -> void:
+	for chunk_x in range(player_position.x - render_distance, player_position.x + render_distance + 1):
+		for chunk_y in range(player_position.y - render_distance, player_position.y + render_distance + 1):
+			var chunk_pos := Vector2i(chunk_x, chunk_y)
+
+			var border := ImmediateMesh.new()
+			border.surface_begin(Mesh.PRIMITIVE_LINES)
+
+			var x: float = chunk_pos.x * chunk_size
+			var z: float = chunk_pos.y * chunk_size
+
+			var y_bottom := -10.0
+			var y_top := 20.0
+
+			var a := Vector3(x, y_bottom, z)
+			var b := Vector3(x + chunk_size, y_bottom, z)
+			var c := Vector3(x + chunk_size, y_bottom, z + chunk_size)
+			var d := Vector3(x, y_bottom, z + chunk_size)
+
+			var A := Vector3(x, y_top, z)
+			var B := Vector3(x + chunk_size, y_top, z)
+			var C := Vector3(x + chunk_size, y_top, z + chunk_size)
+			var D := Vector3(x, y_top, z + chunk_size)
+
+			# Bottom
+			border.surface_add_vertex(a)
+			border.surface_add_vertex(b)
+			border.surface_add_vertex(b)
+			border.surface_add_vertex(c)
+			border.surface_add_vertex(c)
+			border.surface_add_vertex(d)
+			border.surface_add_vertex(d)
+			border.surface_add_vertex(a)
+
+			# Top
+			border.surface_add_vertex(A)
+			border.surface_add_vertex(B)
+			border.surface_add_vertex(B)
+			border.surface_add_vertex(C)
+			border.surface_add_vertex(C)
+			border.surface_add_vertex(D)
+			border.surface_add_vertex(D)
+			border.surface_add_vertex(A)
+
+			# Vertical corners
+			border.surface_add_vertex(a)
+			border.surface_add_vertex(A)
+			border.surface_add_vertex(b)
+			border.surface_add_vertex(B)
+			border.surface_add_vertex(c)
+			border.surface_add_vertex(C)
+			border.surface_add_vertex(d)
+			border.surface_add_vertex(D)
+
+			border.surface_end()
+
+			var chunk_border := MeshInstance3D.new()
+			chunk_border.mesh = border
+			chunk_border.name = "border_%s_%s_border_border" % [chunk_pos.x, chunk_pos.y]
+			$ChunkBorders.add_child(chunk_border)
 
 
 # collector funcs
@@ -280,17 +324,32 @@ func update_terrain(player_position: Vector2i) -> void:
 	generate_collisions(player_position)
 	unload_collisions(player_position)
 	unload_terrain(player_position)
+	if debug_state:
+		debug_terrain(player_position)
 
 func init_terrain(player_position: Vector2i) -> void:
 	await generate_terrain(player_position, true)
 	generate_collisions(player_position)
 
+func debug(state) -> void:
+	debug_state = state
+	print(debug_state)
+	var player_position = $"/root/MainGame/World/EntityRoot/Player".get_chunk_from_position($"/root/MainGame/World/EntityRoot/Player".position)
+	update_terrain(player_position)
+
+	if !state:
+		var chunk_borders = $ChunkBorders.get_children()
+		for chunk_border in chunk_borders:
+			chunk_border.queue_free()
+
 
 # caller func
+
 func _on_player_moved(player_position: Vector2i) -> void:
 	print(player_position)
 	await update_terrain(player_position)
 
 func _ready() -> void:
 	EventListener.player_chunk_changed.connect(_on_player_moved)
+	EventListener.debug.connect(debug)
 	init_terrain(Vector2i(0, 0))

@@ -26,7 +26,6 @@ func _on_resume_button_pressed() -> void:
 func _on_settings_button_pressed() -> void:
 	settings_menu.show()
 	pause_column.hide()
-	print("yay")
 
 func _on_quit_button_pressed() -> void:
 	get_tree().quit()
