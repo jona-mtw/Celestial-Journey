@@ -1,11 +1,10 @@
-@tool
 extends Node3D
 
 @export_category("Chunk Settings")
 @export_range(2, 128, 1) var render_distance := 30
 @export_color_no_alpha var colour := Color(0.5, 0.5, 0.5)
 
-var terrain_seed := randi()
+var terrain_seed := 2
 var freq := 0.01
 var octaves := 5
 var gain := 0.5
@@ -19,15 +18,17 @@ var collision_chunk_size = 3
 var loaded_chunks: PackedVector2Array
 var debug_state := false
 
-# noise func
-
-func get_noise(vert: Vector3) -> float:
+func _init() -> void:
+	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	noise.seed = terrain_seed
 	noise.frequency = freq
 	noise.fractal_octaves = octaves
 	noise.fractal_gain = gain
 	noise.fractal_lacunarity = lacunarity
 
+# noise func
+
+func get_noise(vert: Vector3) -> float:
 	var height = noise.get_noise_2d(vert.x, vert.z) * strength
 	return height
 

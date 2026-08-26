@@ -47,9 +47,9 @@ Eventually will become a game where you can explore a procedurally generated uni
 ### **Dev Roadmap:**
 
 - [x] Player movement
+- [x] Procedural Terrain - without biomes tho :(
 - [ ] Inventory control
 - [ ] Piloting a spacecraft
 - [ ] Photography system
 - [ ] Generating random star systems
-
 More to add!
