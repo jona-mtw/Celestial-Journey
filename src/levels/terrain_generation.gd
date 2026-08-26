@@ -34,6 +34,7 @@ extends Node3D
 	set(value):
 		strength = value
 		#generate_terrain()
+@export var resolution := 2.0
 
 var noise = FastNoiseLite.new()
 var chunk_size = 16
@@ -63,16 +64,19 @@ func generate_verts(chunk_pos: Vector2i) -> Array:
 	var x_offset = floor(chunk_pos.x * chunk_size)
 	var z_offset = floor(chunk_pos.y * chunk_size)
 
-	for x in chunk_size + 1:
-		vert.x = x + x_offset
-		for z in chunk_size + 1:
-			vert.z = z + z_offset
+	for x in (chunk_size + 1) * resolution:
+		vert.x = x / resolution + x_offset
+		for z in (chunk_size + 1) * resolution:
+			vert.z = z / resolution + z_offset
 			vert.y = get_noise(vert)
 			vertices.push_back(vert)
 
 	return vertices
 
 func generate_normals(vertices: PackedVector3Array) -> PackedVector3Array:
+	var index_offset = 1
+	var world_offset = 1 / resolution
+
 	var normals := PackedVector3Array()
 	normals.resize(vertices.size())
 
@@ -85,10 +89,10 @@ func generate_normals(vertices: PackedVector3Array) -> PackedVector3Array:
 		var local_x := vertex_index / width
 		var local_z := vertex_index % width
 
-		for cell_x in range(local_x - 1, local_x + 1):
-			for cell_z in range(local_z - 1, local_z + 1):
-				var world_x := origin_x + cell_x
-				var world_z := origin_z + cell_z
+		for cell_x in range(local_x - index_offset, local_x + index_offset):
+			for cell_z in range(local_z - index_offset, local_z + index_offset):
+				var world_x: float = origin_x + cell_x * world_offset
+				var world_z: float = origin_z + cell_z * world_offset
 
 				# Cell vertices:
 				# A = (x, z)
@@ -99,20 +103,20 @@ func generate_normals(vertices: PackedVector3Array) -> PackedVector3Array:
 				var A := Vector3(world_x, 0, world_z)
 				A.y = get_noise(A)
 
-				var B := Vector3(world_x + 1, 0, world_z)
+				var B := Vector3(world_x + world_offset, 0, world_z)
 				B.y = get_noise(B)
 
-				var C := Vector3(world_x, 0, world_z + 1)
+				var C := Vector3(world_x, 0, world_z + world_offset)
 				C.y = get_noise(C)
 
-				var D := Vector3(world_x + 1, 0, world_z + 1)
+				var D := Vector3(world_x + world_offset, 0, world_z + world_offset)
 				D.y = get_noise(D)
 
 				
 				# triangle 1 - b, c, a
 
-				if (local_x == cell_x + 1 and local_z == cell_z) \
-				or (local_x == cell_x and local_z == cell_z + 1) \
+				if (local_x == cell_x + index_offset and local_z == cell_z) \
+				or (local_x == cell_x and local_z == cell_z + index_offset) \
 				or (local_x == cell_x and local_z == cell_z):
 					var vertex_A := B
 					var vertex_B := C
@@ -128,9 +132,9 @@ func generate_normals(vertices: PackedVector3Array) -> PackedVector3Array:
 
 				# triangle 2 - c, b, d
 
-				if (local_x == cell_x and local_z == cell_z + 1) \
-				or (local_x == cell_x + 1 and local_z == cell_z) \
-				or (local_x == cell_x + 1 and local_z == cell_z + 1):
+				if (local_x == cell_x and local_z == cell_z + index_offset) \
+				or (local_x == cell_x + index_offset and local_z == cell_z) \
+				or (local_x == cell_x + index_offset and local_z == cell_z + index_offset):
 					var vertex_A := C
 					var vertex_B := B
 					var vertex_C := D
@@ -236,7 +240,8 @@ func generate_collisions(player_position: Vector2i) -> void:
 
 	for chunk in collision_chunks:
 		var terrain: MeshInstance3D = get_node("chunk_pos_%s_%s" % [int(chunk.x), int(chunk.y)])
-		terrain.create_trimesh_collision()
+		if terrain:
+			terrain.create_trimesh_collision()
 
 
 # unloading terrain
@@ -271,8 +276,8 @@ func unload_collisions(player_position: Vector2i) -> void:
 # collector funcs
 
 func update_terrain(player_position: Vector2i) -> void:
+	await generate_terrain(player_position)
 	generate_collisions(player_position)
-	generate_terrain(player_position)
 	unload_collisions(player_position)
 	unload_terrain(player_position)
 
@@ -284,7 +289,7 @@ func init_terrain(player_position: Vector2i) -> void:
 # caller func
 func _on_player_moved(player_position: Vector2i) -> void:
 	print(player_position)
-	update_terrain(player_position)
+	await update_terrain(player_position)
 
 func _ready() -> void:
 	EventListener.player_chunk_changed.connect(_on_player_moved)

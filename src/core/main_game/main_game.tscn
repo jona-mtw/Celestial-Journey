@@ -43,9 +43,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 [node name="LevelRoot" type="Node3D" parent="World"]
 
 [node name="Terrain" parent="World/LevelRoot" instance=ExtResource("2_6yl8a")]
-render_distance = 5
 colour = Color(0.7601228, 0.30132538, 0.23868337, 1)
 octaves = 8
+resolution = 0.5
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="World/LevelRoot"]
 environment = SubResource("Environment_6n4xl")
@@ -53,8 +53,10 @@ camera_attributes = SubResource("CameraAttributesPractical_6n4xl")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="World/LevelRoot"]
 transform = Transform3D(-0.8704731, 0.20013651, -0.44969106, -0.019565169, 0.89881426, 0.4378929, 0.49182707, 0.38997224, -0.7784779, 0, 26.566935, 0)
-light_color = Color(0.9256858, 0.8582453, 0.7926851, 1)
+light_color = Color(1, 0.85882354, 0.7921569, 1)
 shadow_enabled = true
+shadow_bias = 10.0
+shadow_normal_bias = 10.0
 
 [node name="HudLayer" type="CanvasLayer" parent="."]
 layer = 10
