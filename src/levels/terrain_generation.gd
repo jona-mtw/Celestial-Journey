@@ -18,6 +18,7 @@ var collision_chunk_size = 3
 var loaded_chunks: PackedVector2Array
 var debug_state := false
 
+# init noise
 func _init() -> void:
 	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	noise.seed = terrain_seed
@@ -344,7 +345,7 @@ func debug(state) -> void:
 			chunk_border.queue_free()
 
 
-# caller func
+# caller funcs
 
 func _on_player_moved(player_position: Vector2i) -> void:
 	print(player_position)
