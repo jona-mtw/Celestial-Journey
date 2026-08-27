@@ -1,3 +1,4 @@
+@tool
 extends Node
 
 @onready var vp := get_viewport()

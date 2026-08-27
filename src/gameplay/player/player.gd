@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-const SPEED: float = 3
+@export var SPEED: float = 3
 const JUMP_VELOCITY: float = 4.5
 @onready var animation_player = $player_model/AnimationPlayer
 

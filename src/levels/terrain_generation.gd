@@ -1,16 +1,49 @@
+@tool
 extends Node3D
 
 @export_category("Chunk Settings")
-@export_range(2, 128, 1) var render_distance := 30
-@export_color_no_alpha var colour := Color(0.5, 0.5, 0.5)
+@export_range(2, 128, 1) var render_distance := 5:
+	set(value):
+		render_distance = value
+		update_editor_terrain()
+@export_color_no_alpha var colour := Color(0.5, 0.5, 0.5):
+	set(value):
+		colour = value
+		update_editor_terrain()
 
-var terrain_seed := 2
-var freq := 0.01
-var octaves := 5
-var gain := 0.5
-var lacunarity := 2.0
-var strength := 10
-var resolution := 2.0
+@export var terrain_seed := randi():
+	set(value):
+		terrain_seed = value
+		noise.seed = terrain_seed
+		update_editor_terrain()
+@export var freq := 0.01:
+	set(value):
+		freq = value
+		noise.frequency = freq
+		update_editor_terrain()
+@export var octaves := 5:
+	set(value):
+		octaves = value
+		noise.fractal_octaves = octaves
+		update_editor_terrain()
+@export var persistence := 0.5:
+	set(value):
+		persistence = value
+		noise.fractal_gain = persistence
+		update_editor_terrain()
+@export var lacunarity := 2.0:
+	set(value):
+		lacunarity = value
+		noise.fractal_lacunarity = lacunarity
+		update_editor_terrain()
+@export var strength := 10:
+	set(value):
+		strength = value
+		update_editor_terrain()
+@export var resolution := 0.5:
+	set(value):
+		resolution = value
+		update_editor_terrain()
 
 var noise = FastNoiseLite.new()
 var chunk_size = 16
@@ -18,13 +51,22 @@ var collision_chunk_size = 3
 var loaded_chunks: PackedVector2Array
 var debug_state := false
 
+func update_editor_terrain() -> void:
+	for child in get_children():
+		if child is MeshInstance3D:
+			child.free()
+
+	loaded_chunks.clear()
+
+	init_terrain(Vector2i(0, 0))
+
 # init noise
 func _init() -> void:
 	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	noise.seed = terrain_seed
 	noise.frequency = freq
 	noise.fractal_octaves = octaves
-	noise.fractal_gain = gain
+	noise.fractal_gain = persistence
 	noise.fractal_lacunarity = lacunarity
 
 # noise func
@@ -187,10 +229,8 @@ func generate_chunk(chunk_pos: Vector2i) -> void:
 	var material := StandardMaterial3D.new()
 	material.albedo_color = colour
 	terrain.material_override = material
-
-	terrain.name = "chunk_pos_%s_%s" % [chunk_pos.x, chunk_pos.y]
-
 	add_child(terrain)
+	terrain.name = "chunk_pos_%s_%s" % [chunk_pos.x, chunk_pos.y]
 
 func generate_terrain(player_position: Vector2i, init: bool = false) -> void:
 	var chunk: Vector2i
@@ -352,6 +392,10 @@ func _on_player_moved(player_position: Vector2i) -> void:
 	await update_terrain(player_position)
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		init_terrain(Vector2i.ZERO)
+		return
+
 	EventListener.player_chunk_changed.connect(_on_player_moved)
 	EventListener.debug.connect(debug)
 	init_terrain(Vector2i(0, 0))

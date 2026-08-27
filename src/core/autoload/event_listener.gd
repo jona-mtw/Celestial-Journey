@@ -1,3 +1,4 @@
+@tool
 extends Node
 
 signal escape_key_pressed()
@@ -13,6 +14,8 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
 func _input(event: InputEvent) -> void:
+	if Engine.is_editor_hint():
+		return
 	if event.is_action_pressed("escape"):
 		escape_key_pressed.emit()
 

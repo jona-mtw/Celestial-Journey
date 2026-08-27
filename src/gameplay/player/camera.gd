@@ -29,5 +29,9 @@ func _input(event: InputEvent) -> void:
 func _process(delta: float) -> void:
 	spring_length = lerp(spring_length, target_zoom, zoom_speed * delta)
 
-	if not Input.is_action_pressed("right_click"):
-		rotation.y = lerp_angle(rotation.y, 0.0, delta * 5)
+	if spring_length < 0.6:
+		player.hide()
+	else:
+		if not Input.is_action_pressed("right_click"):
+			rotation.y = lerp_angle(rotation.y, 0.0, delta * 5)
+		player.show()
