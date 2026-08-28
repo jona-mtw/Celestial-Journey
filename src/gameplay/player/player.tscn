@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://mjj5mw58hyrs" path="res://src/gameplay/player/player.gd" id="1_64h4j"]
 [ext_resource type="Script" uid="uid://bu6jn8bq4wggh" path="res://src/gameplay/player/camera.gd" id="2_k2146"]
-[ext_resource type="PackedScene" uid="uid://b6lx5p4wkgtu7" path="res://assets/art/blend/entities/player_model.blend" id="3_k2146"]
+[ext_resource type="PackedScene" uid="uid://b6lx5p4wkgtu7" path="res://assets/art/blend/entities/player/player_model.blend" id="3_k2146"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_64h4j"]
 radius = 0.3232422
@@ -31,3 +31,81 @@ near = 0.001
 
 [node name="player_model" parent="." instance=ExtResource("3_k2146")]
 transform = Transform3D(-0.4, 0, -3.4969112e-08, 0, 0.4, 0, 3.4969112e-08, 0, -0.4, 0, 1.1959541, 0)
+
+[node name="Skeleton3D" parent="player_model/Armature" index="0"]
+bones/0/position = Vector3(0, -1.6449823, 0)
+bones/1/rotation = Quaternion(0.017360616, 0.004355491, 0.0004121443, 0.9998397)
+bones/2/rotation = Quaternion(-0.012736002, -0.003195074, -0.00030235742, 0.99991375)
+bones/3/rotation = Quaternion(4.2618036e-14, -1.7875539e-07, 3.637979e-12, 1)
+bones/4/position = Vector3(-0.15535736, -0.34307364, -0.24975574)
+bones/4/scale = Vector3(0.99999994, 1, 1)
+bones/5/position = Vector3(-0.15535735, -0.0976111, -0.3101401)
+bones/5/scale = Vector3(0.99999994, 1, 1)
+bones/6/position = Vector3(-0.15535733, -0.34307358, 0.2548527)
+bones/6/scale = Vector3(0.99999994, 1, 1)
+bones/7/position = Vector3(-0.15535733, -0.09761107, 0.30996847)
+bones/7/scale = Vector3(0.9999999, 0.9999998, 0.9999999)
+bones/8/rotation = Quaternion(0.037384864, 0.007178703, -0.0035403776, 0.99926895)
+bones/10/position = Vector3(-0.0003282812, 0.064496525, -0.35697448)
+bones/10/rotation = Quaternion(-0.66140556, -0.00408621, -0.0040311827, 0.75000644)
+bones/11/rotation = Quaternion(-0.7098627, 0.007691951, 0.008428719, 0.70424765)
+bones/12/rotation = Quaternion(-0.004030743, -0.0049481336, -0.030612303, 0.99951106)
+bones/13/rotation = Quaternion(-0.010093538, -1.7861794e-07, 1.251077e-09, 0.99994916)
+bones/16/position = Vector3(-0.00032824907, 0.073973715, 0.3375797)
+bones/16/rotation = Quaternion(0.68572795, 0.00358558, -0.0028305955, 0.7278436)
+bones/17/rotation = Quaternion(0.7157498, -0.0113755725, -0.0013824055, 0.6982628)
+bones/18/rotation = Quaternion(-0.0041503175, 0.00065132, -0.023086803, 0.9997247)
+bones/19/rotation = Quaternion(-0.036073867, 1.0470062e-07, -5.988161e-08, 0.9993491)
+bones/26/rotation = Quaternion(-0.7070941, 2.070855e-08, 2.5710554e-08, 0.7071196)
+bones/27/rotation = Quaternion(-0.6474963, -2.0563967e-08, 2.5315224e-08, 0.76206857)
+bones/28/rotation = Quaternion(-0.07159312, 1.0099737e-07, 5.964136e-10, 0.997434)
+bones/29/rotation = Quaternion(0.7193498, -1.6782316e-08, -4.962815e-08, 0.694648)
+bones/30/rotation = Quaternion(0.6385673, 5.102638e-08, -1.5435376e-08, 0.769566)
+bones/31/rotation = Quaternion(0.06202461, -2.1977273e-07, -1.0680126e-08, 0.99807465)
+
+[node name="Arm Cuffs_L" parent="player_model/Armature/Skeleton3D" index="0"]
+layers = 2
+
+[node name="Arm Cuffs_R" parent="player_model/Armature/Skeleton3D" index="1"]
+layers = 2
+
+[node name="Arms_L" parent="player_model/Armature/Skeleton3D" index="2"]
+layers = 2
+
+[node name="Arms_R" parent="player_model/Armature/Skeleton3D" index="3"]
+layers = 2
+
+[node name="Body" parent="player_model/Armature/Skeleton3D" index="4"]
+layers = 2
+
+[node name="Boots_L" parent="player_model/Armature/Skeleton3D" index="5"]
+layers = 2
+
+[node name="Boots_R" parent="player_model/Armature/Skeleton3D" index="6"]
+layers = 2
+
+[node name="Gloves__L" parent="player_model/Armature/Skeleton3D" index="7"]
+layers = 2
+
+[node name="Gloves__R" parent="player_model/Armature/Skeleton3D" index="8"]
+layers = 2
+
+[node name="Helmet" parent="player_model/Armature/Skeleton3D" index="9"]
+layers = 2
+
+[node name="Leg Cuffs_L" parent="player_model/Armature/Skeleton3D" index="10"]
+layers = 2
+
+[node name="Leg Cuffs_R" parent="player_model/Armature/Skeleton3D" index="11"]
+layers = 2
+
+[node name="Legs_L" parent="player_model/Armature/Skeleton3D" index="12"]
+layers = 2
+
+[node name="Legs_R" parent="player_model/Armature/Skeleton3D" index="13"]
+layers = 2
+
+[node name="Visor" parent="player_model/Armature/Skeleton3D" index="14"]
+layers = 2
+
+[editable path="player_model"]

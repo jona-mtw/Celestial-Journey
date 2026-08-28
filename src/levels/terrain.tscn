@@ -5,5 +5,9 @@
 [node name="Terrain" type="Node3D"]
 script = ExtResource("1_o3ck0")
 terrain_seed = 2870224546
+freq = 0.011
+persistence = 0.1
+lacunarity = 5.0
+resolution = 1.0
 
 [node name="ChunkBorders" type="Node3D" parent="."]

@@ -11,6 +11,7 @@ extends Node3D
 		colour = value
 		update_editor_terrain()
 
+@export_category("Noise Settings")
 @export var terrain_seed := randi():
 	set(value):
 		terrain_seed = value
@@ -229,6 +230,7 @@ func generate_chunk(chunk_pos: Vector2i) -> void:
 	var material := StandardMaterial3D.new()
 	material.albedo_color = colour
 	terrain.material_override = material
+	terrain.layers = 1
 	add_child(terrain)
 	terrain.name = "chunk_pos_%s_%s" % [chunk_pos.x, chunk_pos.y]
 
@@ -356,6 +358,7 @@ func debug_terrain(player_position: Vector2i) -> void:
 			var chunk_border := MeshInstance3D.new()
 			chunk_border.mesh = border
 			chunk_border.name = "border_%s_%s_border_border" % [chunk_pos.x, chunk_pos.y]
+			chunk_border.layers = 6
 			$ChunkBorders.add_child(chunk_border)
 
 
@@ -367,6 +370,9 @@ func update_terrain(player_position: Vector2i) -> void:
 	unload_collisions(player_position)
 	unload_terrain(player_position)
 	if debug_state:
+		var chunk_borders = $ChunkBorders.get_children()
+		for chunk_border in chunk_borders:
+			chunk_border.queue_free()
 		debug_terrain(player_position)
 
 func init_terrain(player_position: Vector2i) -> void:

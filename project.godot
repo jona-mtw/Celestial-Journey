@@ -19,7 +19,6 @@ config/icon="res://icon.svg"
 [autoload]
 
 EventListener="*res://src/core/autoload/event_listener.gd"
-Debug="*res://src/debug/debug.gd"
 
 [debug]
 
@@ -111,6 +110,16 @@ debug={
 
 [layer_names]
 
+3d_render/layer_1="terrain"
+3d_render/layer_2="players"
+3d_render/layer_3="entities"
+3d_render/layer_4="walls"
+3d_render/layer_6="debug"
+3d_render/layer_7="misc"
 3d_physics/layer_1="walls"
 3d_physics/layer_2="player"
 3d_physics/layer_3="entities"
+
+[physics]
+
+3d/default_gravity=9.799999999999995
