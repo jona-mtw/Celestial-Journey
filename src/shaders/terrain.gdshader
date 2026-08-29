@@ -1,6 +1,6 @@
 shader_type spatial;
 
-
+uniform float chunk_verts[]
 
 void vertex() {
 	// Called for every vertex the material is visible on.

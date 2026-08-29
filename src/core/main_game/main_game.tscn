@@ -43,9 +43,9 @@ volumetric_fog_ambient_inject = 0.1
 [node name="EntityRoot" type="Node3D" parent="World"]
 
 [node name="Player" parent="World/EntityRoot" instance=ExtResource("1_3fed5")]
-transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -18.287113, 7.103491, 15.982802)
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 5, 0)
 rotation_edit_mode = 1
-SPEED = 2.0
+SPEED = 50.0
 
 [node name="Skeleton3D" parent="World/EntityRoot/Player/player_model/Armature" index="0"]
 bones/0/position = Vector3(0.038422734, -1.6786022, -4.51713e-09)
@@ -143,9 +143,9 @@ theme = ExtResource("4_n4iq1")
 
 [node name="Stats" parent="DebugLayer/DebugRoot" index="0"]
 visible = false
-text = "FPS: 95
-CPU: 62.76 ms
-Memory: 644.09 MB"
+text = "FPS: 142
+CPU: 20.97 ms
+Memory: 633.41 MB"
 
 [node name="PauseLayer" type="CanvasLayer" parent="."]
 process_mode = 2

@@ -20,8 +20,8 @@ func _physics_process(delta: float) -> void:
 		last_chunk = current_chunk
 		EventListener.player_chunk_changed.emit(current_chunk)
 
-	if not is_on_floor():
-		velocity += get_gravity() * delta
+	# if not is_on_floor():
+	# 	velocity += get_gravity() * delta
 
 	if Input.is_action_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY

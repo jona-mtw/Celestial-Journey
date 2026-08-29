@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 EventListener="*res://src/core/autoload/event_listener.gd"
+LOD="*res://src/levels/lod.gd"
 
 [debug]
 
