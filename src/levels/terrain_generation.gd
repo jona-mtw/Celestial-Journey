@@ -91,7 +91,7 @@ var lods := {
 	2: lod_2,
 }
 
-func get_lod(resolution, chunk_pos: Vector2i) -> void:
+func get_mesh(resolution, chunk_pos: Vector2i) -> void:
 	var lod = lods[resolution]
 	var terrain := MeshInstance3D.new()
 	terrain.mesh = lod.mesh

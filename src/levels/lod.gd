@@ -3,6 +3,9 @@ class_name TerrainLOD
 
 var mesh: ArrayMesh
 
+func _init(lod_level: float = 1, chunk_size: int = 16) -> void:
+	var vert_num = int(chunk_size * lod_level + 1)
+	mesh = generate_mesh(lod_level, vert_num)
 
 func generate_verts(lod_level: float, vert_num: int) -> PackedVector3Array:
 	var verts := PackedVector3Array()
@@ -35,7 +38,6 @@ func generate_indices(vert_num: int) -> PackedInt32Array:
 
 	return indices
 
-
 func generate_mesh(lod_level: float, vert_num: int) -> ArrayMesh:
 	var array_mesh = ArrayMesh.new()
 	var arrays = []
@@ -50,8 +52,3 @@ func generate_mesh(lod_level: float, vert_num: int) -> ArrayMesh:
 	array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 
 	return array_mesh
-
-
-func _init(lod_level: float = 1, chunk_size: int = 16) -> void:
-	var vert_num = int(chunk_size * lod_level + 1)
-	mesh = generate_mesh(lod_level, vert_num)
