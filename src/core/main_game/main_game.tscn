@@ -143,9 +143,12 @@ theme = ExtResource("4_n4iq1")
 
 [node name="Stats" parent="DebugLayer/DebugRoot" index="0"]
 visible = false
-text = "FPS: 142
-CPU: 20.97 ms
-Memory: 633.41 MB"
+text = "Permformance:
+FPS: %d
+CPU: %.2f ms
+Memory: %.2f MB
+
+Coordinates: (%)"
 
 [node name="PauseLayer" type="CanvasLayer" parent="."]
 process_mode = 2

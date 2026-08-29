@@ -42,7 +42,7 @@ var loaded_chunks: PackedVector2Array
 var debug_state := false
 
 
-# init noise
+# noise
 func _init() -> void:
 	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	noise.seed = terrain_seed
@@ -51,11 +51,9 @@ func _init() -> void:
 	noise.fractal_gain = persistence
 	noise.fractal_lacunarity = lacunarity
 
-# noise func
 func get_noise(vert: Vector3) -> float:
 	var height = noise.get_noise_2d(vert.x, vert.z) * strength
 	return height
-
 
 func generate_verts(chunk_pos: Vector2i, lod: float) -> Array:
 	var vertices := PackedVector3Array()
@@ -75,6 +73,8 @@ func generate_verts(chunk_pos: Vector2i, lod: float) -> Array:
 
 	return vertices
 
+
+# mesh
 var lod_neg3 := TerrainLOD.new(0.125)
 var lod_neg2 := TerrainLOD.new(0.25)
 var lod_neg1 := TerrainLOD.new(0.5)
@@ -100,7 +100,3 @@ func get_lod(resolution, chunk_pos: Vector2i) -> void:
 	global_pos.x = chunk_pos.x * chunk_size
 	global_pos.z = chunk_pos.y * chunk_size
 	terrain.position = global_pos
-
-func _ready() -> void:
-	get_lod(2, Vector2i(0, 0))
-	get_lod(-3, Vector2i(0, 1))

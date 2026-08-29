@@ -52,6 +52,6 @@ func generate_mesh(lod_level: float, vert_num: int) -> ArrayMesh:
 	return array_mesh
 
 
-func _init(lod_level: float, chunk_size: int = 16) -> void:
+func _init(lod_level: float = 1, chunk_size: int = 16) -> void:
 	var vert_num = int(chunk_size * lod_level + 1)
 	mesh = generate_mesh(lod_level, vert_num)
