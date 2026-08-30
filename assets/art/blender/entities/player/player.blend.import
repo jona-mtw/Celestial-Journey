@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://b6lx5p4wkgtu7"
-path="res://.godot/imported/player_model.blend-6b696594e264c93a9d86454f02c81899.scn"
+uid="uid://dmt28dxk1a1hs"
+path="res://.godot/imported/player.blend-d08582ab782b0ecdcc304ef640d4017c.scn"
 
 [deps]
 
-source_file="res://assets/art/blend/entities/player/player_model.blend"
-dest_files=["res://.godot/imported/player_model.blend-6b696594e264c93a9d86454f02c81899.scn"]
+source_file="res://assets/art/blender/entities/player/player.blend"
+dest_files=["res://.godot/imported/player.blend-d08582ab782b0ecdcc304ef640d4017c.scn"]
 
 [params]
 
@@ -22,7 +22,7 @@ nodes/import_as_skeleton_bones=false
 nodes/use_name_suffixes=true
 nodes/use_node_type_suffixes=true
 meshes/ensure_tangents=true
-meshes/generate_lods=false
+meshes/generate_lods=true
 meshes/create_shadow_meshes=true
 meshes/light_baking=1
 meshes/lightmap_texel_size=0.2

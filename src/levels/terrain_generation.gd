@@ -55,7 +55,7 @@ func get_noise(vert: Vector3) -> float:
 	var height = noise.get_noise_2d(vert.x, vert.z) * strength
 	return height
 
-func generate_verts(chunk_pos: Vector2i, lod: float) -> Array:
+func generate_chunk_verts(chunk_pos: Vector2i, lod: float) -> Array:
 	var vertices := PackedVector3Array()
 
 	var x_offset = floor(chunk_pos.x * chunk_size) - 1
@@ -75,28 +75,57 @@ func generate_verts(chunk_pos: Vector2i, lod: float) -> Array:
 
 
 # mesh
-var lod_neg3 := TerrainLOD.new(0.125)
-var lod_neg2 := TerrainLOD.new(0.25)
-var lod_neg1 := TerrainLOD.new(0.5)
-var lod_0 := TerrainLOD.new(1)
-var lod_1 := TerrainLOD.new(2)
-var lod_2 := TerrainLOD.new(4)
-
-var lods := {
-	-3: lod_neg3,
-	-2: lod_neg2,
-	-1: lod_neg1,
-	0: lod_0,
-	1: lod_1,
-	2: lod_2,
+var lods: Dictionary[int, TerrainLOD] = { # power of 2s
+	-3: TerrainLOD.new(0.125),
+	-2: TerrainLOD.new(0.25),
+	-1: TerrainLOD.new(0.5),
+	0: TerrainLOD.new(1),
+	1: TerrainLOD.new(2),
+	2: TerrainLOD.new(4),
 }
 
-func get_mesh(resolution, chunk_pos: Vector2i) -> void:
+func generate_chunk_mesh(resolution, chunk_pos: Vector2i) -> void:
 	var lod = lods[resolution]
 	var terrain := MeshInstance3D.new()
 	terrain.mesh = lod.mesh
+	terrain.name = "chunk_%d_%d" % [chunk_pos.x, chunk_pos.y]
 	add_child(terrain)
 	var global_pos: Vector3
 	global_pos.x = chunk_pos.x * chunk_size
 	global_pos.z = chunk_pos.y * chunk_size
 	terrain.position = global_pos
+
+
+# terrain generation
+
+func get_chunk_ring(distance: int) -> Array:
+	var chunk_ring := PackedVector2Array()
+	var chunk_ring_length = distance + 1
+	print(chunk_ring_length)
+	for x_chunk in range(-chunk_ring_length, chunk_ring_length + 1, 1):
+		if abs(x_chunk) == chunk_ring_length:
+			for y_chunk in range(-chunk_ring_length, chunk_ring_length + 1, 1):
+				chunk_ring.push_back(Vector2(x_chunk, y_chunk))
+		else:
+			chunk_ring.push_back(Vector2(x_chunk, -chunk_ring_length))
+			chunk_ring.push_back(Vector2(x_chunk, chunk_ring_length))
+
+	return chunk_ring
+
+func chunks_to_render() -> Array: # relative to player
+	var chunks_to_render_arr := PackedVector2Array()
+	chunks_to_render_arr.append(Vector2(0, 0))
+
+	for distance in range(render_distance + 1):
+		chunks_to_render_arr.append_array(get_chunk_ring(distance))
+		print(get_chunk_ring(distance))
+
+	return chunks_to_render_arr
+
+
+func generate_terrain_mesh(player_pos: Vector3) -> void:
+	for chunk in chunks_to_render():
+		generate_chunk_mesh(1, chunk)
+
+func _ready() -> void:
+	generate_terrain_mesh(Vector3(0, 0, 0))

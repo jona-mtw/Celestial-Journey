@@ -14,7 +14,7 @@ func get_chunk_from_position(player_position: Vector3):
 var current_chunk: Vector2i
 var last_chunk: Vector2i
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	current_chunk = get_chunk_from_position(position)
 
 	if current_chunk != last_chunk:
