@@ -17,7 +17,7 @@ func debug(state: bool):
 		stats.show()
 	else:
 		vp.debug_draw = Viewport.DEBUG_DRAW_DISABLED
-		stats.hide()
+		# stats.hide()
 
 func calculate_chunk(pos: Vector3) -> Vector2i:
 	var chunk_coord := Vector2i()
