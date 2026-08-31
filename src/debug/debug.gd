@@ -1,5 +1,6 @@
 @tool
 extends Control
+class_name Debug
 
 @onready var vp := get_viewport()
 @onready var player: CharacterBody3D = $"../../World/EntityRoot/Player"

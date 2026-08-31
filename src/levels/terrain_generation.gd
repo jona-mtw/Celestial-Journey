@@ -5,6 +5,7 @@ extends Node3D
 @export_range(2, 128, 1) var render_distance := 5:
 	set(value):
 		render_distance = value
+@export var lod_dist := [1, 3, 5, 7, 9]
 @export_color_no_alpha var colour := Color(0.5, 0.5, 0.5):
 	set(value):
 		colour = value
@@ -75,14 +76,14 @@ func generate_chunk_verts(chunk_pos: Vector2i, lod: float) -> Array:
 
 
 # mesh
-var lods: Dictionary[int, TerrainLOD] = { # power of 2s
-	-3: TerrainLOD.new(0.125),
-	-2: TerrainLOD.new(0.25),
-	-1: TerrainLOD.new(0.5),
-	0: TerrainLOD.new(1),
-	1: TerrainLOD.new(2),
-	2: TerrainLOD.new(4),
-}
+var lods := [
+	#TerrainLOD.new(4),
+	TerrainLOD.new(2),
+	TerrainLOD.new(1),
+	TerrainLOD.new(0.5),
+	TerrainLOD.new(0.25),
+	TerrainLOD.new(0.125)
+]
 
 func generate_chunk_mesh(resolution, chunk_pos: Vector2i) -> void:
 	var lod = lods[resolution]
@@ -98,7 +99,7 @@ func generate_chunk_mesh(resolution, chunk_pos: Vector2i) -> void:
 
 # terrain generation
 
-func get_chunk_ring(distance: int) -> Array:
+func get_chunk_ring(distance: int) -> PackedVector2Array:
 	var chunk_ring := PackedVector2Array()
 	var chunk_ring_length = distance + 1
 	print(chunk_ring_length)
@@ -112,20 +113,28 @@ func get_chunk_ring(distance: int) -> Array:
 
 	return chunk_ring
 
-func chunks_to_render() -> Array: # relative to player
-	var chunks_to_render_arr := PackedVector2Array()
-	chunks_to_render_arr.append(Vector2(0, 0))
-
-	for distance in range(render_distance + 1):
-		chunks_to_render_arr.append_array(get_chunk_ring(distance))
-		print(get_chunk_ring(distance))
-
-	return chunks_to_render_arr
-
-
 func generate_terrain_mesh(player_pos: Vector3) -> void:
-	for chunk in chunks_to_render():
-		generate_chunk_mesh(1, chunk)
+	generate_chunk_mesh(0, Vector2i(0, 0))
+	var outskirts = false
+	var lod: int
 
+	for distance in range(render_distance):
+		var chunk_ring := get_chunk_ring(distance)
+
+		if not outskirts:
+			if distance == lod_dist[-1]:
+					outskirts = true
+					lod = lod_dist.find(lod_dist[-1])
+			if not outskirts:
+				for i in lod_dist:
+					if distance < i:
+						lod = lod_dist.find(i)
+						break
+
+		for chunk in chunk_ring:
+			generate_chunk_mesh(lod, chunk)
+		print(lod)
+
+		
 func _ready() -> void:
 	generate_terrain_mesh(Vector3(0, 0, 0))

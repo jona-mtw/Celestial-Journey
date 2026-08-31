@@ -82,7 +82,7 @@ bones/31/rotation = Quaternion(0.023262858, -0.0049078995, 0.028203154, 0.999319
 [node name="LevelRoot" type="Node3D" parent="World"]
 
 [node name="Terrain" parent="World/LevelRoot" instance=ExtResource("2_6yl8a")]
-render_distance = 2
+render_distance = 30
 colour = Color(0.76543814, 0.30475864, 0.24167547, 1)
 octaves = 4
 persistence = 0.15
@@ -144,9 +144,9 @@ theme = ExtResource("4_n4iq1")
 [node name="Stats" parent="DebugLayer/DebugRoot" index="0"]
 visible = false
 text = "Performance:
-FPS: 145
-CPU: 6.18 ms
-Memory: 555.52 MB
+FPS: 77
+CPU: 11.13 ms
+Memory: 565.67 MB
 
 Coordinates: (0, 5, 0)
 Chunk: (0, 0)"
