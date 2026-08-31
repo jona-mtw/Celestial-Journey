@@ -1,6 +1,9 @@
 @tool
 extends Node3D
 
+@onready var player: CharacterBody3D = $"../../EntityRoot/Player"
+
+#region chunk settings
 @export_category("Chunk Settings")
 @export_range(2, 128, 1) var render_distance := 5:
 	set(value):
@@ -9,7 +12,10 @@ extends Node3D
 @export_color_no_alpha var colour := Color(0.5, 0.5, 0.5):
 	set(value):
 		colour = value
+#endregion
 
+
+#region noise settings
 @export_category("Noise Settings")
 @export var terrain_seed := randi():
 	set(value):
@@ -34,6 +40,8 @@ extends Node3D
 @export var strength := 10:
 	set(value):
 		strength = value
+#endregion
+
 
 var noise = FastNoiseLite.new()
 var chunk_size = 16
@@ -41,7 +49,24 @@ var collision_chunk_size = 3
 var loaded_chunks: PackedVector2Array
 
 
-# noise
+#region player position
+func get_chunk_from_position(player_position: Vector3):
+	return Vector2i(
+		floori(player_position.x / chunk_size),
+		floori(player_position.z / chunk_size)
+	)
+
+var last_chunk := Vector2i(0, 0)
+func _process(_delta: float) -> void:
+	var current_chunk: Vector2i = get_chunk_from_position(player.global_position)
+
+	if current_chunk != last_chunk:
+		update_terrain(current_chunk)
+		last_chunk = current_chunk
+#endregion
+
+
+#region noise
 func _init() -> void:
 	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	noise.seed = terrain_seed
@@ -71,9 +96,10 @@ func generate_chunk_verts(chunk_pos: Vector2i, lod: float) -> Array:
 			vertices.push_back(vert)
 
 	return vertices
+#endregion
 
 
-# mesh
+#region mesh
 var lods := [
 	#TerrainLOD.new(4),
 	TerrainLOD.new(2),
@@ -101,10 +127,10 @@ func generate_chunk_mesh(resolution, chunk_pos: Vector2i) -> void:
 	global_pos.x = chunk_pos.x * chunk_size
 	global_pos.z = chunk_pos.y * chunk_size
 	terrain.position = global_pos
+#endregion
 
 
-# terrain generation
-
+#region terrain generation
 func get_chunk_ring(distance: int) -> PackedVector2Array:
 	var chunk_ring := PackedVector2Array()
 	var chunk_ring_length = distance + 1
@@ -140,13 +166,17 @@ func generate_terrain_mesh(player_pos: Vector2i) -> void:
 			chunk += player_pos
 			generate_chunk_mesh(lod, chunk)
 			loaded_chunks.push_back(chunk)
+#endregion
 
+
+#region update terrain
 func update_terrain(player_pos: Vector2i) -> void:
 	for child in get_children():
 		child.free()
 		loaded_chunks = PackedVector2Array()
 	generate_terrain_mesh(player_pos)
+#endregion
+
 
 func _ready() -> void:
-	EventListener.player_chunk_changed.connect(update_terrain)
 	generate_terrain_mesh(Vector2i(0, 0))

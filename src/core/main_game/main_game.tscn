@@ -24,8 +24,7 @@ ssao_detail = 0.0
 ssao_horizon = 0.07
 ssao_sharpness = 1.0
 fog_sky_affect = 0.0
-volumetric_fog_enabled = true
-volumetric_fog_density = 0.02
+volumetric_fog_density = 0.01
 volumetric_fog_albedo = Color(0.8719702, 0.8071916, 0.7791263, 1)
 volumetric_fog_emission = Color(0.01, 0, 0.001833334, 1)
 volumetric_fog_length = 200.0
@@ -43,7 +42,7 @@ volumetric_fog_ambient_inject = 0.1
 [node name="EntityRoot" type="Node3D" parent="World"]
 
 [node name="Player" parent="World/EntityRoot" instance=ExtResource("1_3fed5")]
-transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 5, 0)
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 100, 0)
 rotation_edit_mode = 1
 SPEED = 50.0
 
@@ -144,11 +143,11 @@ theme = ExtResource("4_n4iq1")
 [node name="Stats" parent="DebugLayer/DebugRoot" index="0"]
 visible = false
 text = "Performance:
-FPS: 77
-CPU: 11.13 ms
-Memory: 565.67 MB
+FPS: 38
+CPU: 27.93 ms
+Memory: 638.73 MB
 
-Coordinates: (0, 5, 0)
+Coordinates: (0, 100, 0)
 Chunk: (0, 0)"
 
 [node name="PauseLayer" type="CanvasLayer" parent="."]

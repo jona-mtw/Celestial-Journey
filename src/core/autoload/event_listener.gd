@@ -5,8 +5,6 @@ signal escape_key_pressed()
 
 signal settings_button_pressed()
 
-signal player_chunk_changed(position: Vector2i)
-
 var debug_state := false
 signal debug(state: bool)
 
