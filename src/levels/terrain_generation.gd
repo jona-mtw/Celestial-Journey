@@ -46,7 +46,7 @@ extends Node3D
 var noise = FastNoiseLite.new()
 var chunk_size = 16
 var collision_chunk_size = 3
-var loaded_chunks: PackedVector2Array
+var loaded_chunks: Dictionary[Vector2i, Dictionary]
 
 
 #region player position
@@ -109,15 +109,7 @@ var lods := [
 	TerrainLOD.new(0.125)
 ]
 
-func init_lods():
-	for lod in lods:
-		var terrain := MeshInstance3D.new()
-		terrain.mesh = lod.mesh
-		terrain.name = "template_lod_%" % [lods.find(lod)]
-		add_child(terrain)
-		terrain.hide()
-
-func generate_chunk_mesh(resolution, chunk_pos: Vector2i) -> void:
+func generate_chunk_mesh(resolution, chunk_pos: Vector2i) -> MeshInstance3D:
 	var lod = lods[resolution]
 	var terrain := MeshInstance3D.new()
 	terrain.mesh = lod.mesh
@@ -127,8 +119,16 @@ func generate_chunk_mesh(resolution, chunk_pos: Vector2i) -> void:
 	global_pos.x = chunk_pos.x * chunk_size
 	global_pos.z = chunk_pos.y * chunk_size
 	terrain.position = global_pos
+	return terrain
 #endregion
 
+func add_loaded_chunk(lod: int, pos: Vector2i, collision := false) -> void:
+	var node := generate_chunk_mesh(lod, pos)
+	loaded_chunks[pos] = {
+		"node": node,
+		"lod": lod,
+		"collision": collision
+	}
 
 #region terrain generation
 func get_chunk_ring(distance: int) -> PackedVector2Array:
@@ -145,7 +145,7 @@ func get_chunk_ring(distance: int) -> PackedVector2Array:
 	return chunk_ring
 
 func generate_terrain_mesh(player_pos: Vector2i) -> void:
-	generate_chunk_mesh(0, player_pos)
+	add_loaded_chunk(0, player_pos, true)
 	var outskirts = false
 	var lod: int
 
@@ -164,8 +164,8 @@ func generate_terrain_mesh(player_pos: Vector2i) -> void:
 
 		for chunk: Vector2i in chunk_ring:
 			chunk += player_pos
-			generate_chunk_mesh(lod, chunk)
-			loaded_chunks.push_back(chunk)
+			add_loaded_chunk(lod, chunk)
+	print(loaded_chunks)
 #endregion
 
 
@@ -173,7 +173,8 @@ func generate_terrain_mesh(player_pos: Vector2i) -> void:
 func update_terrain(player_pos: Vector2i) -> void:
 	for child in get_children():
 		child.free()
-		loaded_chunks = PackedVector2Array()
+		loaded_chunks = {}
+
 	generate_terrain_mesh(player_pos)
 #endregion
 
