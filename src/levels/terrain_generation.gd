@@ -5,12 +5,18 @@ extends Node3D
 
 #region chunk settings
 @export_category("Chunk Settings")
-@export_range(2, 128, 1) var render_distance := 5:
+@export_range(2, 128, 1) var render_distance := 128:
 	set(value):
 		render_distance = value
-		lod_lookup(render_distance)
+		lod_lookup()
+		loaded_chunks = {}
+		init_required_chunks()
+		if is_inside_tree():
+			update_terrain(get_chunk_from_position(player.global_position))
+		else:
+			update_terrain(Vector2i(0, 0))
 		print(lod_lookup_table)
-@export var lod_distance_arr := [1, 4, 9, 16, 25]
+@export var lod_distance_arr := [1, 4, 9, 16, 25, 30]
 @export_color_no_alpha var colour := Color(0.5, 0.5, 0.5):
 	set(value):
 		colour = value
@@ -53,10 +59,11 @@ var lods := [
 	TerrainLOD.new(1),
 	TerrainLOD.new(0.5),
 	TerrainLOD.new(0.25),
-	TerrainLOD.new(0.125)
+	TerrainLOD.new(0.125),
+	TerrainLOD.new(0.0625),
 ]
 var lod_lookup_table := PackedInt32Array()
-
+var required_relative_chunks: Dictionary[Vector2i, int]
 
 #region player position
 func get_chunk_from_position(player_position: Vector3):
@@ -65,9 +72,9 @@ func get_chunk_from_position(player_position: Vector3):
 		floori(player_position.z / chunk_size)
 	)
 
-var last_chunk := Vector2i(0, 0)
+var last_chunk: Vector2i = Vector2i(0, 0)
 func _process(_delta: float) -> void:
-	var current_chunk: Vector2i = get_chunk_from_position(player.global_position)
+	var current_chunk: Vector2i = get_chunk_from_position(Vector3(0, 0, 0)) # player.global_position)
 
 	if current_chunk != last_chunk:
 		update_terrain(current_chunk)
@@ -108,11 +115,11 @@ func generate_chunk_verts(chunk_pos: Vector2i, lod: float) -> Array:
 #endregion
 
 
-#region mesh
-func lod_lookup(distance: int) -> void:
+#region lookups tables
+func lod_lookup() -> void:
 	lod_lookup_table.clear()
 	var lod: int
-	for i in distance + 1:
+	for i in render_distance + 1:
 		for lod_distance in lod_distance_arr:
 			if i <= lod_distance:
 				lod = lod_distance_arr.find(lod_distance)
@@ -122,6 +129,17 @@ func lod_lookup(distance: int) -> void:
 func get_lod(distance: int) -> int:
 	return lod_lookup_table[distance]
 
+func init_required_chunks() -> void:
+	required_relative_chunks = {}
+	for x in range(-render_distance, render_distance + 1):
+		for y in range(-render_distance, render_distance + 1):
+			var chunk := Vector2i(x, y)
+			var distance: int = max(abs(x), abs(y))
+			required_relative_chunks[chunk] = get_lod(distance)
+#endregion
+
+
+#region mesh
 func generate_chunk_mesh(resolution, chunk_pos: Vector2i) -> MeshInstance3D:
 	var lod = lods[resolution]
 	var terrain := MeshInstance3D.new()
@@ -133,7 +151,6 @@ func generate_chunk_mesh(resolution, chunk_pos: Vector2i) -> MeshInstance3D:
 	global_pos.z = chunk_pos.y * chunk_size
 	terrain.position = global_pos
 	return terrain
-#endregion
 
 func add_loaded_chunk(lod: int, pos: Vector2i) -> void:
 	var node := generate_chunk_mesh(lod, pos)
@@ -141,50 +158,36 @@ func add_loaded_chunk(lod: int, pos: Vector2i) -> void:
 		"node": node,
 		"lod": lod,
 	}
-
-#region terrain generation
-func generate_terrain_mesh(player_pos: Vector2i) -> void:
-	for x in range(-render_distance, render_distance + 1):
-		for y in range(-render_distance, render_distance + 1):
-			var chunk := Vector2i(x, y) + player_pos
-			var distance := int(max(abs(x), abs(y)))
-			var lod := get_lod(distance)
-
-			add_loaded_chunk(lod, chunk)
 #endregion
 
 
 #region update terrain
-func required_chunks(player_pos: Vector2i) -> Dictionary:
-	var chunks: Dictionary[Vector2i, int]
-
-	for x in range(-render_distance, render_distance + 1):
-		for y in range(-render_distance, render_distance + 1):
-			var chunk := Vector2i(x, y) + player_pos
-			var distance := int(max(abs(x), abs(y)))
-			chunks[chunk] = get_lod(distance)
-
-	return chunks
-
 func update_terrain(player_pos: Vector2i) -> void:
-	var required_chunks_arr := required_chunks(player_pos)
 	for chunk in loaded_chunks.keys():
-		if not required_chunks_arr.has(chunk):
+		var relative: Vector2i = chunk - player_pos
+
+		if not required_relative_chunks.has(relative):
 			loaded_chunks[chunk]["node"].queue_free()
 			loaded_chunks.erase(chunk)
-		
-	for chunk in required_chunks_arr:
-		var required_lod: int = required_chunks_arr[chunk]
-		if loaded_chunks.has(chunk):
-			if required_chunks_arr[chunk] == loaded_chunks[chunk]["lod"]:
-				continue
-			
+			continue
+
+		var required_lod: int = required_relative_chunks[relative]
+
+		if loaded_chunks[chunk]["lod"] != required_lod:
 			loaded_chunks[chunk]["node"].queue_free()
-			
-		add_loaded_chunk(required_lod, chunk)
+			add_loaded_chunk(required_lod, chunk)
+
+	for relative_chunk in required_relative_chunks:
+		var chunk := relative_chunk + player_pos
+		if not loaded_chunks.has(chunk):
+			add_loaded_chunk(required_relative_chunks[relative_chunk], chunk)
 #endregion
 
 
 func _ready() -> void:
-	lod_lookup(render_distance)
-	generate_terrain_mesh(Vector2i(0, 0))
+	lod_lookup()
+	init_required_chunks()
+	if is_inside_tree():
+		update_terrain(Vector2i(0, 0)) # get_chunk_from_position(player.global_position))
+	else:
+		update_terrain(Vector2i(0, 0))
