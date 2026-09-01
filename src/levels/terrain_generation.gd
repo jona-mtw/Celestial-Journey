@@ -8,12 +8,13 @@ extends Node3D
 @export_range(2, 128, 1) var render_distance := 5:
 	set(value):
 		render_distance = value
+		lod_lookup(render_distance)
+		print(lod_lookup_table)
 @export var lod_distance_arr := [1, 4, 9, 16, 25]
 @export_color_no_alpha var colour := Color(0.5, 0.5, 0.5):
 	set(value):
 		colour = value
 #endregion
-
 
 #region noise settings
 @export_category("Noise Settings")
@@ -42,11 +43,19 @@ extends Node3D
 		strength = value
 #endregion
 
-
 var noise = FastNoiseLite.new()
 var chunk_size = 16
 var collision_chunk_size = 3
 var loaded_chunks: Dictionary[Vector2i, Dictionary]
+var lods := [
+	#TerrainLOD.new(4),
+	TerrainLOD.new(2),
+	TerrainLOD.new(1),
+	TerrainLOD.new(0.5),
+	TerrainLOD.new(0.25),
+	TerrainLOD.new(0.125)
+]
+var lod_lookup_table := PackedInt32Array()
 
 
 #region player position
@@ -100,26 +109,18 @@ func generate_chunk_verts(chunk_pos: Vector2i, lod: float) -> Array:
 
 
 #region mesh
-var lods := [
-	#TerrainLOD.new(4),
-	TerrainLOD.new(2),
-	TerrainLOD.new(1),
-	TerrainLOD.new(0.5),
-	TerrainLOD.new(0.25),
-	TerrainLOD.new(0.125)
-]
-
-func get_lod(distance: int) -> int:
+func lod_lookup(distance: int) -> void:
+	lod_lookup_table.clear()
 	var lod: int
-	if distance > lod_distance_arr[-1]:
-		lod = lod_distance_arr.find(lod_distance_arr[-1])
-	else:
+	for i in distance + 1:
 		for lod_distance in lod_distance_arr:
-			if distance <= lod_distance:
+			if i <= lod_distance:
 				lod = lod_distance_arr.find(lod_distance)
 				break
+		lod_lookup_table.append(lod)
 
-	return lod
+func get_lod(distance: int) -> int:
+	return lod_lookup_table[distance]
 
 func generate_chunk_mesh(resolution, chunk_pos: Vector2i) -> MeshInstance3D:
 	var lod = lods[resolution]
@@ -185,4 +186,5 @@ func update_terrain(player_pos: Vector2i) -> void:
 
 
 func _ready() -> void:
+	lod_lookup(render_distance)
 	generate_terrain_mesh(Vector2i(0, 0))
