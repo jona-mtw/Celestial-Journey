@@ -5,7 +5,7 @@ extends Node3D
 
 #region chunk settings
 @export_category("Chunk Settings")
-@export_range(2, 128, 1) var render_distance := 128:
+@export_range(2, 128, 1) var render_distance := 30:
 	set(value):
 		render_distance = value
 		lod_lookup()
@@ -49,6 +49,7 @@ extends Node3D
 		strength = value
 #endregion
 
+#region global vars
 var noise = FastNoiseLite.new()
 var chunk_size = 16
 var collision_chunk_size = 3
@@ -64,6 +65,7 @@ var lods := [
 ]
 var lod_lookup_table := PackedInt32Array()
 var required_relative_chunks: Dictionary[Vector2i, int]
+#endregion
 
 #region player position
 func get_chunk_from_position(player_position: Vector3):
@@ -74,7 +76,7 @@ func get_chunk_from_position(player_position: Vector3):
 
 var last_chunk: Vector2i = Vector2i(0, 0)
 func _process(_delta: float) -> void:
-	var current_chunk: Vector2i = get_chunk_from_position(Vector3(0, 0, 0)) # player.global_position)
+	var current_chunk: Vector2i = get_chunk_from_position(player.global_position)
 
 	if current_chunk != last_chunk:
 		update_terrain(current_chunk)
@@ -84,7 +86,7 @@ func _process(_delta: float) -> void:
 
 #region noise
 func _init() -> void:
-	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
+	noise.noise_type = FastNoiseLite.TYPE_PERLIN
 	noise.seed = terrain_seed
 	noise.frequency = freq
 	noise.fractal_octaves = octaves
@@ -152,11 +154,13 @@ func generate_chunk_mesh(resolution, chunk_pos: Vector2i) -> MeshInstance3D:
 	terrain.position = global_pos
 	return terrain
 
-func add_loaded_chunk(lod: int, pos: Vector2i) -> void:
+func add_loaded_chunk(lod: int, pos: Vector2i, heightmap = null, texture = null) -> void:
 	var node := generate_chunk_mesh(lod, pos)
 	loaded_chunks[pos] = {
 		"node": node,
 		"lod": lod,
+		"heightmap": heightmap,
+		"texture": texture
 	}
 #endregion
 
@@ -188,6 +192,6 @@ func _ready() -> void:
 	lod_lookup()
 	init_required_chunks()
 	if is_inside_tree():
-		update_terrain(Vector2i(0, 0)) # get_chunk_from_position(player.global_position))
+		update_terrain(get_chunk_from_position(player.global_position))
 	else:
 		update_terrain(Vector2i(0, 0))
