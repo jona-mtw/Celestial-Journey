@@ -1,16 +1,13 @@
 shader_type spatial;
 
-uniform float chunk_verts[]
+uniform sampler2D heightmap : filter_nearest, repeat_disable;
 
 void vertex() {
-	// Called for every vertex the material is visible on.
-}
+    ivec2 size = textureSize(heightmap, 0);
+    
+    int x = int(clamp(UV.x * float(size.x - 1) + 0.5, 0.0, float(size.x - 1)));
+    int z = int(clamp(UV.y * float(size.y - 1) + 0.5, 0.0, float(size.y - 1)));
 
-void fragment() {
-	// Called for every pixel the material is visible on.
+    float height = texelFetch(heightmap, ivec2(x, z), 0).r;
+    VERTEX.y += height;
 }
-
-//void light() {
-//	// Called for every pixel for every light affecting the material.
-//	// Uncomment to replace the default light processing function with this one.
-//}

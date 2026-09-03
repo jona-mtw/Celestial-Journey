@@ -65,10 +65,35 @@ var lods := [
 ]
 var lod_lookup_table := PackedInt32Array()
 var required_relative_chunks: Dictionary[Vector2i, int]
+var terrain_material: ShaderMaterial
 #endregion
 
+func _init() -> void:
+	var shader := load("res://src/shaders/terrain.gdshader")
+
+	terrain_material = ShaderMaterial.new()
+	terrain_material.shader = shader
+	
+	noise.noise_type = FastNoiseLite.TYPE_PERLIN
+	noise.seed = terrain_seed
+	noise.frequency = freq
+	noise.fractal_octaves = octaves
+	noise.fractal_gain = persistence
+	noise.fractal_lacunarity = lacunarity
+
+func _ready() -> void:
+	lod_lookup()
+	init_required_chunks()
+	var player_chunk := get_chunk_from_position(player.global_position)
+	last_chunk = player_chunk
+	if is_inside_tree():
+		update_terrain(get_chunk_from_position(player.global_position))
+	else:
+		update_terrain(Vector2i(0, 0))
+
+
 #region player position
-func get_chunk_from_position(player_position: Vector3):
+func get_chunk_from_position(player_position: Vector3) -> Vector2i:
 	return Vector2i(
 		floori(player_position.x / chunk_size),
 		floori(player_position.z / chunk_size)
@@ -85,14 +110,6 @@ func _process(_delta: float) -> void:
 
 
 #region noise
-func _init() -> void:
-	noise.noise_type = FastNoiseLite.TYPE_PERLIN
-	noise.seed = terrain_seed
-	noise.frequency = freq
-	noise.fractal_octaves = octaves
-	noise.fractal_gain = persistence
-	noise.fractal_lacunarity = lacunarity
-
 func get_noise(vert: Vector3) -> float:
 	var height = noise.get_noise_2d(vert.x, vert.z) * strength
 	return height
@@ -114,6 +131,31 @@ func generate_chunk_verts(chunk_pos: Vector2i, lod: float) -> Array:
 			vertices.push_back(vert)
 
 	return vertices
+
+func generate_heightmap(chunk_pos: Vector2i, lod: float) -> Image:
+	var resolution := int(chunk_size * lod + 1)
+
+	var image := Image.create(
+		resolution,
+		resolution,
+		false,
+		Image.FORMAT_RF
+	)
+
+	for x in range(resolution):
+		for z in range(resolution):
+			var u := float(x) / float(resolution - 1)
+			var v := float(z) / float(resolution - 1)
+
+			var world_x: float = chunk_pos.x * chunk_size + u * chunk_size
+			var world_z: float = chunk_pos.y * chunk_size + v * chunk_size
+
+			var height := noise.get_noise_2d(world_x, world_z) * strength
+			image.set_pixel(x, z, Color(height, 0.0, 0.0, 1.0))
+
+	return image
+
+
 #endregion
 
 
@@ -142,26 +184,62 @@ func init_required_chunks() -> void:
 
 
 #region mesh
-func generate_chunk_mesh(resolution, chunk_pos: Vector2i) -> MeshInstance3D:
+func generate_chunk_mesh(resolution, chunk_pos: Vector2i, texture: ImageTexture) -> MeshInstance3D:
 	var lod = lods[resolution]
 	var terrain := MeshInstance3D.new()
+	var global_pos: Vector3
+
 	terrain.mesh = lod.mesh
 	terrain.name = "chunk_%d_%d" % [chunk_pos.x, chunk_pos.y]
+	
+	var material := terrain_material.duplicate()
+	material.set_shader_parameter("heightmap", texture)
+	terrain.material_override = material
+	
 	add_child(terrain)
-	var global_pos: Vector3
+	
 	global_pos.x = chunk_pos.x * chunk_size
 	global_pos.z = chunk_pos.y * chunk_size
+
 	terrain.position = global_pos
+	
 	return terrain
 
-func add_loaded_chunk(lod: int, pos: Vector2i, heightmap = null, texture = null) -> void:
-	var node := generate_chunk_mesh(lod, pos)
+func add_loaded_chunk(lod: int, pos: Vector2i) -> void:
+	var lod_level: float = lods[lod].level
+
+	var heightmap := generate_heightmap(pos, lod_level)
+	var texture := ImageTexture.create_from_image(heightmap)
+
+	var mesh_node := generate_chunk_mesh(lod, pos, texture)
+
+	var static_body := StaticBody3D.new()
+	mesh_node.add_child(static_body)
+
+	var collision_shape := CollisionShape3D.new()
+	var heightmap_shape := HeightMapShape3D.new()
+
+	var res := heightmap.get_width()
+	heightmap_shape.map_width = res
+	heightmap_shape.map_depth = res
+
+	var raw_data := heightmap.get_data()
+	var float_array := raw_data.to_float32_array()
+	heightmap_shape.map_data = float_array
+
+	collision_shape.shape = heightmap_shape
+	var scale_factor = float(chunk_size) / float(res - 1)
+	collision_shape.scale = Vector3(scale_factor, 1.0, scale_factor)
+
+	static_body.add_child(collision_shape)
+
 	loaded_chunks[pos] = {
-		"node": node,
+		"node": mesh_node,
 		"lod": lod,
 		"heightmap": heightmap,
 		"texture": texture
 	}
+
 #endregion
 
 
@@ -171,14 +249,23 @@ func update_terrain(player_pos: Vector2i) -> void:
 		var relative: Vector2i = chunk - player_pos
 
 		if not required_relative_chunks.has(relative):
-			loaded_chunks[chunk]["node"].queue_free()
+			var old_node: MeshInstance3D = loaded_chunks[chunk]["node"]
+
+			remove_child(old_node)
+			old_node.free()
+
 			loaded_chunks.erase(chunk)
 			continue
 
 		var required_lod: int = required_relative_chunks[relative]
 
 		if loaded_chunks[chunk]["lod"] != required_lod:
-			loaded_chunks[chunk]["node"].queue_free()
+			var old_node: MeshInstance3D = loaded_chunks[chunk]["node"]
+
+			remove_child(old_node)
+			old_node.free()
+
+			loaded_chunks.erase(chunk)
 			add_loaded_chunk(required_lod, chunk)
 
 	for relative_chunk in required_relative_chunks:
@@ -186,12 +273,3 @@ func update_terrain(player_pos: Vector2i) -> void:
 		if not loaded_chunks.has(chunk):
 			add_loaded_chunk(required_relative_chunks[relative_chunk], chunk)
 #endregion
-
-
-func _ready() -> void:
-	lod_lookup()
-	init_required_chunks()
-	if is_inside_tree():
-		update_terrain(get_chunk_from_position(player.global_position))
-	else:
-		update_terrain(Vector2i(0, 0))
