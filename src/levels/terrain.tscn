@@ -1,28 +1,30 @@
-[gd_scene load_steps=7 format=3 uid="uid://cg0c6v6n7pwoo"]
+[gd_scene load_steps=8 format=3 uid="uid://cg0c6v6n7pwoo"]
 
 [ext_resource type="ArrayMesh" uid="uid://dm63yfcf62wgd" path="res://assets/art/glb/environments/clipmap.res" id="1_shqj6"]
 [ext_resource type="Shader" uid="uid://ce8cxq1urr7bm" path="res://src/shaders/terrain.tres" id="2_kvj0e"]
 [ext_resource type="Script" uid="uid://7wobx80bhcka" path="res://src/levels/terrain.gd" id="3_uevfd"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_kvj0e"]
-noise_type = 0
-seed = 2
-frequency = 0.0247
-fractal_lacunarity = 4.375
+frequency = 0.0049
+fractal_type = 2
+fractal_weighted_strength = 0.7
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_uevfd"]
-width = 100
-height = 100
 noise = SubResource("FastNoiseLite_kvj0e")
-bump_strength = 8.9
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_be0su"]
+noise = SubResource("FastNoiseLite_kvj0e")
+as_normal_map = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_be0su"]
 render_priority = 0
 shader = ExtResource("2_kvj0e")
-shader_parameter/u = 0.0
-shader_parameter/v = 0.0
+shader_parameter/u = -0.16
+shader_parameter/v = -0.1
 shader_parameter/heightmap = SubResource("NoiseTexture2D_uevfd")
-shader_parameter/height = 1000
+shader_parameter/height = 2000
+shader_parameter/normalmap = SubResource("NoiseTexture2D_be0su")
+shader_parameter/u_terrain_normal_basis = Basis(1, 0, 0, 0, 0.2, 0, 0, 0, 1)
 
 [node name="Terrain" type="MeshInstance3D"]
 mesh = ExtResource("1_shqj6")

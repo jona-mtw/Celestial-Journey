@@ -24,6 +24,7 @@ ssao_detail = 0.0
 ssao_horizon = 0.07
 ssao_sharpness = 1.0
 fog_sky_affect = 0.0
+volumetric_fog_enabled = true
 volumetric_fog_density = 0.01
 volumetric_fog_albedo = Color(0.8719702, 0.8071916, 0.7791263, 1)
 volumetric_fog_emission = Color(0.01, 0, 0.001833334, 1)
@@ -42,9 +43,12 @@ volumetric_fog_ambient_inject = 0.1
 [node name="EntityRoot" type="Node3D" parent="World"]
 
 [node name="Player" parent="World/EntityRoot" instance=ExtResource("1_3fed5")]
-transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 651.45557, 0)
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 1879.7197, 0)
 rotation_edit_mode = 1
-SPEED = 100.0
+SPEED = 500.0
+
+[node name="Camera" parent="World/EntityRoot/Player/CameraPivot" index="0"]
+far = 20000.0
 
 [node name="Skeleton3D" parent="World/EntityRoot/Player/player_model/Armature" index="0"]
 bones/0/position = Vector3(0, -1.6449822, 0)
@@ -81,28 +85,30 @@ bones/31/rotation = Quaternion(0.008476466, -2.2720093e-07, -1.7045915e-09, 0.99
 
 [node name="LevelRoot" type="Node3D" parent="World"]
 
+[node name="Terrain" parent="World/LevelRoot" instance=ExtResource("2_tk58t")]
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="World/LevelRoot"]
 environment = SubResource("Environment_6n4xl")
 camera_attributes = SubResource("CameraAttributesPractical_6n4xl")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="World/LevelRoot"]
-transform = Transform3D(-0.8704731, 0.20013651, -0.44969106, -0.019565169, 0.89881426, 0.43789288, 0.49182707, 0.38997224, -0.7784779, 14.920853, 10.934807, 44.176826)
+transform = Transform3D(0.45931157, 0.26627883, 0.8474246, -0.47502095, -0.7325076, 0.48763502, 0.7505917, -0.6265208, -0.20996122, -11167.881, 888.83813, -9937.61)
 layers = 64
 light_color = Color(1, 0.85882354, 0.7921569, 1)
+light_indirect_energy = 0.607
+light_specular = 13.59
 light_cull_mask = 4294967199
 shadow_enabled = true
 shadow_bias = 0.005
 shadow_normal_bias = 1.0
 shadow_reverse_cull_face = true
-shadow_caster_mask = 4294967198
+shadow_caster_mask = 4294967199
 directional_shadow_split_2 = 0.3
 directional_shadow_split_3 = 0.3
 directional_shadow_blend_splits = true
 directional_shadow_fade_start = 0.77
 directional_shadow_max_distance = 40.0
 directional_shadow_pancake_size = 0.1
-
-[node name="Terrain" parent="World/LevelRoot" instance=ExtResource("2_tk58t")]
 
 [node name="HudLayer" type="CanvasLayer" parent="."]
 layer = 10
@@ -141,10 +147,10 @@ theme = ExtResource("4_n4iq1")
 visible = false
 text = "Performance:
 FPS: 144
-CPU: 15.62 ms
-Memory: 609.47 MB
+CPU: 2.45 ms
+Memory: 627.63 MB
 
-Coordinates: (0, 651, 0)
+Coordinates: (0, 1879, 0)
 Chunk: (0, 0)"
 
 [node name="PauseLayer" type="CanvasLayer" parent="."]
