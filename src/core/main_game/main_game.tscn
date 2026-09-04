@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://cpd8mby2cspyb"]
 
 [ext_resource type="PackedScene" uid="uid://dew2j6vtburbv" path="res://src/gameplay/player/player.tscn" id="1_3fed5"]
-[ext_resource type="PackedScene" uid="uid://kvjhsaqnruys" path="res://src/levels/terrain.tscn" id="2_6yl8a"]
+[ext_resource type="PackedScene" uid="uid://cg0c6v6n7pwoo" path="res://src/levels/terrain.tscn" id="2_tk58t"]
 [ext_resource type="PackedScene" uid="uid://dmqh1a0jy1fwr" path="res://src/ui/pause_menu/pause_menu.tscn" id="3_6n4xl"]
 [ext_resource type="PackedScene" uid="uid://sdv5vp8n54sm" path="res://src/debug/debug.tscn" id="3_tk58t"]
 [ext_resource type="Theme" uid="uid://bsm4qh1o5r875" path="res://src/ui/theme/global_theme.tres" id="4_n4iq1"]
@@ -42,49 +42,44 @@ volumetric_fog_ambient_inject = 0.1
 [node name="EntityRoot" type="Node3D" parent="World"]
 
 [node name="Player" parent="World/EntityRoot" instance=ExtResource("1_3fed5")]
-transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 0)
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 651.45557, 0)
 rotation_edit_mode = 1
 SPEED = 100.0
 
 [node name="Skeleton3D" parent="World/EntityRoot/Player/player_model/Armature" index="0"]
-bones/0/position = Vector3(0.038422734, -1.6786022, -4.51713e-09)
-bones/1/rotation = Quaternion(-0.0040746992, -0.0010320864, -0.0023607658, 0.9999884)
-bones/2/rotation = Quaternion(-0.001400126, -0.00010535335, -0.0024121169, 0.9999961)
-bones/3/rotation = Quaternion(0.020318853, 0.0051997826, 0.00451839, 0.99976987)
-bones/4/position = Vector3(-0.13395794, -0.34326884, -0.26238328)
-bones/4/scale = Vector3(1.0500282, 1.0500282, 1.0500281)
-bones/5/position = Vector3(-0.15535736, -0.09761103, -0.33192265)
-bones/5/scale = Vector3(1.1487334, 1.1487333, 1.1487333)
-bones/6/position = Vector3(-0.13395791, -0.3432688, 0.26746982)
-bones/6/scale = Vector3(1.0500282, 1.0500282, 1.0500281)
-bones/7/position = Vector3(-0.15535735, -0.09761103, 0.33175105)
-bones/7/scale = Vector3(1.148733, 1.148733, 1.1487331)
-bones/8/rotation = Quaternion(-0.02407542, -0.004418209, -0.0034067377, 0.9996946)
-bones/10/position = Vector3(-0.00032828114, 0.064496525, -0.35697454)
-bones/10/rotation = Quaternion(-0.66140556, -0.0040862104, -0.0040311827, 0.75000644)
-bones/11/rotation = Quaternion(-0.74755615, -0.0014978785, 0.009265214, 0.66413236)
-bones/12/rotation = Quaternion(0.008411758, -0.0005572969, -0.005201275, 0.99995095)
-bones/13/rotation = Quaternion(-0.010093538, -1.7900659e-07, 2.1499884e-09, 0.99994916)
-bones/16/position = Vector3(-0.00032824755, 0.07397377, 0.3375797)
-bones/16/rotation = Quaternion(0.68572795, 0.0035855803, -0.0028305955, 0.7278436)
-bones/17/rotation = Quaternion(0.71836436, 0.013690952, 0.028300354, 0.69495636)
-bones/18/rotation = Quaternion(-0.009495435, 0.016905027, -0.058582064, 0.9980944)
-bones/19/rotation = Quaternion(-0.036073864, 1.0004012e-07, -6.151899e-08, 0.9993491)
-bones/27/rotation = Quaternion(-0.6417648, -0.060954902, -0.051154226, 0.7627619)
-bones/28/rotation = Quaternion(-0.06058792, 0.009332692, 0.08317072, 0.99464804)
-bones/29/rotation = Quaternion(0.68665034, -1.3309395e-08, -5.185181e-08, 0.7269879)
-bones/30/rotation = Quaternion(0.6873122, 0.009623302, -0.006198742, 0.72627205)
-bones/31/rotation = Quaternion(0.023262858, -0.0049078995, 0.028203154, 0.9993195)
+bones/0/position = Vector3(0, -1.6449822, 0)
+bones/1/rotation = Quaternion(0, 0, 0, 1)
+bones/2/rotation = Quaternion(0, 1.7881393e-07, 0, 1)
+bones/3/rotation = Quaternion(0, -1.7881393e-07, 0, 1)
+bones/4/position = Vector3(-0.15535736, -0.3430736, -0.24975574)
+bones/4/scale = Vector3(1, 1, 1)
+bones/5/position = Vector3(-0.15535736, -0.09761107, -0.31014007)
+bones/5/scale = Vector3(1, 1, 1)
+bones/6/position = Vector3(-0.15535733, -0.3430736, 0.2548527)
+bones/6/scale = Vector3(1, 1, 1)
+bones/7/position = Vector3(-0.15535733, -0.09761107, 0.30996844)
+bones/7/scale = Vector3(1, 0.9999998, 0.9999999)
+bones/8/rotation = Quaternion(3.3130393e-10, 4.861387e-10, -0.003523762, 0.9999938)
+bones/10/position = Vector3(-0.0003282839, 0.041751146, -0.3632927)
+bones/10/rotation = Quaternion(-0.6257902, -0.0033691055, -0.004567767, 0.7799708)
+bones/11/rotation = Quaternion(0.024837175, 0.0002786917, 0.010896752, 0.99963206)
+bones/12/rotation = Quaternion(-0.0040282966, -0.0004769792, -0.0052129366, 0.9999782)
+bones/13/rotation = Quaternion(-0.010093542, -1.785804e-07, 2.087475e-09, 0.99994904)
+bones/16/position = Vector3(-0.00032825314, 0.041751146, 0.34010696)
+bones/16/rotation = Quaternion(0.6365766, 0.0029963108, -0.0033678391, 0.7712003)
+bones/17/rotation = Quaternion(-0.025852082, -0.00025534772, 0.00855109, 0.9996292)
+bones/18/rotation = Quaternion(-0.0036000821, 9.2230104e-05, -0.0040513785, 0.9999853)
+bones/19/rotation = Quaternion(-0.03607387, 1.0381759e-07, -6.014097e-08, 0.9993491)
+bones/26/rotation = Quaternion(-0.68015087, 1.7334894e-08, 2.175759e-08, 0.73307216)
+bones/27/rotation = Quaternion(-0.61751205, -1.8630818e-08, 1.97782e-08, 0.7865614)
+bones/28/rotation = Quaternion(0.012938426, 1.1169973e-07, 7.244746e-10, 0.9999163)
+bones/29/rotation = Quaternion(0.6908664, -1.37502125e-08, -5.1576635e-08, 0.72298247)
+bones/30/rotation = Quaternion(0.5925544, 4.824559e-08, -2.001695e-08, 0.8055304)
+bones/31/rotation = Quaternion(0.008476466, -2.2720093e-07, -1.7045915e-09, 0.99996406)
 
 [node name="EffectRoot" type="Node3D" parent="World"]
 
 [node name="LevelRoot" type="Node3D" parent="World"]
-
-[node name="Terrain" parent="World/LevelRoot" instance=ExtResource("2_6yl8a")]
-render_distance = 50
-colour = Color(0.76543814, 0.30475864, 0.24167547, 1)
-octaves = 4
-persistence = 0.15
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="World/LevelRoot"]
 environment = SubResource("Environment_6n4xl")
@@ -106,6 +101,8 @@ directional_shadow_blend_splits = true
 directional_shadow_fade_start = 0.77
 directional_shadow_max_distance = 40.0
 directional_shadow_pancake_size = 0.1
+
+[node name="Terrain" parent="World/LevelRoot" instance=ExtResource("2_tk58t")]
 
 [node name="HudLayer" type="CanvasLayer" parent="."]
 layer = 10
@@ -143,11 +140,11 @@ theme = ExtResource("4_n4iq1")
 [node name="Stats" parent="DebugLayer/DebugRoot" index="0"]
 visible = false
 text = "Performance:
-FPS: 100
-CPU: 15.24 ms
-Memory: 801.94 MB
+FPS: 144
+CPU: 15.62 ms
+Memory: 609.47 MB
 
-Coordinates: (0, 0, 0)
+Coordinates: (0, 651, 0)
 Chunk: (0, 0)"
 
 [node name="PauseLayer" type="CanvasLayer" parent="."]
@@ -159,7 +156,6 @@ visible = false
 
 [editable path="World/EntityRoot/Player"]
 [editable path="World/EntityRoot/Player/player_model"]
-[editable path="World/LevelRoot/Terrain"]
 [editable path="DebugLayer/DebugRoot"]
 [editable path="PauseLayer/PauseMenu"]
 [editable path="PauseLayer/PauseMenu/SettingsMenu"]

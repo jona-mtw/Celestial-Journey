@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://djvj40q52412n"
-path="res://.godot/imported/clipmesh.blend-040624aed50c9f3cadbbe2c1a9098454.scn"
+path="res://.godot/imported/clipmap.blend-adcfade6b23aed80d03f42b077cda191.scn"
 
 [deps]
 
-source_file="res://assets/art/blender/environments/clipmesh.blend"
-dest_files=["res://.godot/imported/clipmesh.blend-040624aed50c9f3cadbbe2c1a9098454.scn"]
+source_file="res://assets/art/blender/environments/clipmap.blend"
+dest_files=["res://.godot/imported/clipmap.blend-adcfade6b23aed80d03f42b077cda191.scn"]
 
 [params]
 
@@ -22,7 +22,7 @@ nodes/import_as_skeleton_bones=false
 nodes/use_name_suffixes=true
 nodes/use_node_type_suffixes=true
 meshes/ensure_tangents=true
-meshes/generate_lods=true
+meshes/generate_lods=false
 meshes/create_shadow_meshes=true
 meshes/light_baking=1
 meshes/lightmap_texel_size=0.2
@@ -37,7 +37,19 @@ import_script/path=""
 materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
-_subresources={}
+_subresources={
+"meshes": {
+"clipmap_Plane_005": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/art/glb/environments/clipmap.res",
+"save_to_file/path": "uid://dm63yfcf62wgd"
+}
+}
+}
 blender/nodes/visible=0
 blender/nodes/active_collection_only=false
 blender/nodes/punctual_lights=true
@@ -47,7 +59,7 @@ blender/nodes/modifiers=1
 blender/meshes/colors=false
 blender/meshes/uvs=true
 blender/meshes/normals=true
-blender/meshes/export_geometry_nodes_instances=false
+blender/meshes/export_geometry_nodes_instances=true
 blender/meshes/tangents=true
 blender/meshes/skins=2
 blender/meshes/export_bones_deforming_mesh_only=false
