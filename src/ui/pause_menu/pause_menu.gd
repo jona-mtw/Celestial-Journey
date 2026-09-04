@@ -7,6 +7,10 @@ func _ready() -> void:
 	escape_key_pressed()
 	EventListener.escape_key_pressed.connect(escape_key_pressed)
 
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("exit"):
+		get_tree().quit()
+
 func escape_key_pressed() -> void:
 	if settings_menu.visible:
 		settings_menu._on_back_button_pressed()
@@ -26,7 +30,6 @@ func _on_resume_button_pressed() -> void:
 func _on_settings_button_pressed() -> void:
 	settings_menu.show()
 	pause_column.hide()
-	print("yay")
 
 func _on_quit_button_pressed() -> void:
 	get_tree().quit()

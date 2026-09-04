@@ -1,7 +1,9 @@
 extends SpringArm3D
 
 @onready var camera: Camera3D = $Camera
-@onready var player: CharacterBody3D = $'..'
+@onready var player: CharacterBody3D = $".."
+@onready var visor: MeshInstance3D = $"../player_model/Armature/Skeleton3D/Visor"
+@onready var animation_player: AnimationPlayer = $"../player_model/AnimationPlayer"
 
 @export var sensitivity: float = 0.005
 @export var min_zoom: float = 0.0
@@ -11,10 +13,16 @@ extends SpringArm3D
 
 @onready var target_zoom: float = spring_length
 
+func _ready() -> void:
+	visor.hide()
+
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		if Input.is_action_pressed("right_click"):
-			rotation.y -= event.relative.x * sensitivity
+			if spring_length > 0.6:
+				rotation.y -= event.relative.x * sensitivity
+			else:
+				player.rotation.y -= event.relative.x * sensitivity
 		else:
 			player.rotation.y -= event.relative.x * sensitivity
 		rotation.x -= event.relative.y * sensitivity
@@ -28,6 +36,14 @@ func _input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	spring_length = lerp(spring_length, target_zoom, zoom_speed * delta)
+
+	if spring_length < 0.6:
+		rotation.y = 0
+		rotation.x = clamp(rotation.x, deg_to_rad(-30), deg_to_rad(60))
+		visor.hide()
+		animation_player.play("FirstPerson")
+	else:
+		visor.show()
 
 	if not Input.is_action_pressed("right_click"):
 		rotation.y = lerp_angle(rotation.y, 0.0, delta * 5)

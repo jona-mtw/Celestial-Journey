@@ -9,65 +9,80 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -1920.0
-offset_bottom = -1080.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_u4p1g")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-layout_mode = 0
-offset_right = 1920.0
-offset_bottom = 1080.0
-color = Color(0.09, 0.09, 0.09, 0.7372549)
-metadata/_edit_use_anchors_ = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.09019608, 0.09019608, 0.09019608, 0.7372549)
 
 [node name="PauseColumn" type="Control" parent="."]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="PauseLabel" type="Label" parent="PauseColumn"]
-layout_mode = 0
-offset_left = 848.0
-offset_top = 405.0
-offset_right = 1060.0
-offset_bottom = 453.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -111.0
+offset_top = -106.0
+offset_right = 101.0
+offset_bottom = -58.0
 theme = ExtResource("3_j7lcx")
 text = "PAUSE MENU"
 
 [node name="ResumeButton" type="Button" parent="PauseColumn"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 20.400002
-anchor_top = 13.000001
-anchor_right = 27.6
-anchor_bottom = 14.35
-offset_left = -6.1035156e-05
-offset_top = -6.1035156e-05
+anchor_left = 0.5
+anchor_top = 0.50600004
+anchor_right = 0.5
+anchor_bottom = 0.50600004
+offset_left = -144.0
+offset_top = -26.480042
+offset_right = 144.0
+offset_bottom = 27.519958
 theme = ExtResource("3_j7lcx")
 text = "RESUME"
 
 [node name="SettingsButton" type="Button" parent="PauseColumn"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 20.400002
-anchor_top = 15.000001
-anchor_right = 27.6
-anchor_bottom = 16.35
-offset_left = -6.1035156e-05
-offset_top = -6.1035156e-05
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -144.0
+offset_top = 60.0
+offset_right = 144.0
+offset_bottom = 114.0
 theme = ExtResource("3_j7lcx")
 text = "SETTINGS"
 
 [node name="MainMenuButton" type="Button" parent="PauseColumn"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 20.400002
-anchor_top = 17.0
-anchor_right = 27.6
-anchor_bottom = 18.35
-offset_left = -6.1035156e-05
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -144.0
+offset_top = 140.0
+offset_right = 144.0
+offset_bottom = 194.0
 theme = ExtResource("3_j7lcx")
 text = "MAIN MENU
 "
@@ -75,27 +90,29 @@ text = "MAIN MENU
 [node name="QuitButton" type="Button" parent="PauseColumn"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 20.400002
-anchor_top = 19.0
-anchor_right = 27.6
-anchor_bottom = 20.35
-offset_left = -6.1035156e-05
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -144.0
+offset_top = 220.0
+offset_right = 144.0
+offset_bottom = 274.0
 theme = ExtResource("3_j7lcx")
 text = "QUIT
 "
 
 [node name="SettingsMenu" parent="." instance=ExtResource("3_kqx3l")]
 visible = false
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 0.0
-offset_bottom = 0.0
+layout_mode = 1
+anchor_left = 0.5
+anchor_top = 0.57900006
+anchor_right = 0.5
+anchor_bottom = 0.57900006
+offset_left = -960.0
+offset_top = -625.32007
+offset_right = -960.0
+offset_bottom = -625.32007
 
 [connection signal="pressed" from="PauseColumn/ResumeButton" to="." method="_on_resume_button_pressed"]
 [connection signal="pressed" from="PauseColumn/SettingsButton" to="." method="_on_settings_button_pressed"]

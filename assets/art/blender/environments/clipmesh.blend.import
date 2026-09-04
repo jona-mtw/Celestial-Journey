@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dmt28dxk1a1hs"
-path="res://.godot/imported/player.blend-2ef60b3d1c11ab6204c76af650cf4a74.scn"
+uid="uid://djvj40q52412n"
+path="res://.godot/imported/clipmesh.blend-040624aed50c9f3cadbbe2c1a9098454.scn"
 
 [deps]
 
-source_file="res://assets/art/blend/entities/player.blend"
-dest_files=["res://.godot/imported/player.blend-2ef60b3d1c11ab6204c76af650cf4a74.scn"]
+source_file="res://assets/art/blender/environments/clipmesh.blend"
+dest_files=["res://.godot/imported/clipmesh.blend-040624aed50c9f3cadbbe2c1a9098454.scn"]
 
 [params]
 

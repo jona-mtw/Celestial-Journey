@@ -1,28 +1,13 @@
 extends CharacterBody3D
 
-const SPEED: float = 2
+@export var SPEED: float = 3
 const JUMP_VELOCITY: float = 4.5
 @onready var animation_player = $player_model/AnimationPlayer
 
-var coord: Vector2i
-func get_chunk_from_position(player_position: Vector3):
-	coord.x = floor(player_position.x / 16)
-	coord.y = floor(player_position.z / 16)
 
-	return coord
-
-var current_chunk: Vector2i
-var last_chunk: Vector2i
-func _physics_process(delta: float) -> void:
-	current_chunk = get_chunk_from_position(position)
-
-	if current_chunk != last_chunk:
-		last_chunk = current_chunk
-		EventListener.player_chunk_changed.emit(current_chunk)
-
-	if not is_on_floor():
-		velocity += get_gravity() * delta
-
+func _physics_process(_delta: float) -> void:
+	# if not is_on_floor():
+	# 	velocity += get_gravity() * delta
 	if Input.is_action_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
