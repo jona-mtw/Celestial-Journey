@@ -143,9 +143,9 @@ theme = ExtResource("4_n4iq1")
 [node name="Stats" parent="DebugLayer/DebugRoot" index="0"]
 visible = false
 text = "Performance:
-FPS: 143
-CPU: 8.27 ms
-Memory: 646.80 MB
+FPS: 100
+CPU: 15.24 ms
+Memory: 801.94 MB
 
 Coordinates: (0, 0, 0)
 Chunk: (0, 0)"
