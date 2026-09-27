@@ -1,63 +1,49 @@
 # **Worlds Unbound**
 
-Eventually will become a game where you can explore a procedurally generated universe in your spacecraft, land on planets, orbit around stars, and record your journey every step of the way if you so wish by taking photos and putting them in albums.
+A game where the player explores procedurally generated planets in realistic orbits in space ships constructed by the player. As of right now (v1.0.1-alpha) this is merely just a terrain engine for my game, which I went through with multiple iterations of terrain.
 
-### **Current Features:**
-* can move the player
-* very basic procedural terrain generation
-* pause menu, where you can exit the game from
-* settings menu, where you will be able to change seetings
-* no textures or shaders :(
+## Current State
+* player movement
+* procedural terrain generation
+* UI - pause menu, settings menu (just a template, nothing in it right now) and main menu
+* basic terrain textures (just 3 colours based on height)
 
-<br>
-
-### **Planned Features:** 
-#### Exploration:
-* Fly a spacecraft through space
-* Procedually generated planets, star systems (with proper orbits) and universe
-* Land on planets and explore surfaces
-* Discover new celestial bodies
-* Planets with unique environments
-#### Photography and Documentation:
-* Take photos on your journey
-* Create photo albums
-* Create maps
-* Name planets, stars and locations you discover
-* View your journey through galaxies
-#### Spacecraft:
-* Pilot your spacecraft
-* Being able to explore your spacecraft and perform EVAs
-* Upgrade and customise your ship
-#### Terrain:
-* (Technically?) infinte universe
-* Different planet types, which each type having unique atmospheres and structure
-* Procedually generated terrain
-* Unique star systems
-#### Potential Future Ideas:
-* Aliens
-* Trade
-* Lore
-* Civilisation
-* Mining
-* Black holes, nebulae, and other celestial objects
-* Orbital Mechanics
+## Installation
+* go to releases
+* click on v1.0.1-alpha
+* download the .exe file
 
 <br>
 
-### **Dev Roadmap:**
+**Alternatively** (to take a deeper look at the project, and to be able to change the terrain settings in real time):
+* install the Godot engine (completely open source and no installer) : https://godotengine.org/
+* download the .zip or tar.gz file (whatever your more familiar with, if you do not know what they are, click on .zip)
+* extract the file
+* import the project into godot, by opening godot, then clicking the import button, and finding the project directory
 
-- [x] Player movement
-- [x] Procedural Terrain - without biomes tho :(
-- [ ] Inventory control
-- [ ] Piloting a spacecraft
-- [ ] Photography system
-- [ ] Generating random star systems
-More to add!
+**What you can do if you open it in Godot:**
+If you go to: res://src/levels/terrain.tcsn, then click on the mesh. On the right hand side, click on Surface Material Override, then the little icon next to the reload icon, then terrain.gdshader...
+* click and drag on the U and V values to see the terrain moving on a unmoving plane.
+* click on heightmap > FastNoiseLite to change the noise settings. Tweak with them until you get something you like (make sure to expand the Fractal panel)
+* change the biome heights
+* change the overall terrain height
+* change the normal basis (sounds complicated, but just drag the values in the matrix until it looks cool)
 
+If you go to res://src/core/main_game/main_game.tscn...
+* click on the Player in the scene tree, and change its speed (if the speed is too high, but under 200m/s should be fine, you may clip through the mess)
+* click on DirectionalLight3D in the scene tree, and rotate it to see how the terrain would look with the sun at different positions in the sky (looks terrible atm at night)
 
+## Hot Keys
+Movement - WASD
 
+Zooming in and out - scroll wheel
 
+Freelook - hold RMB
 
+Pause - escape
 
-https://github.com/user-attachments/assets/d057fc80-a39c-4b9d-9223-b67c67d50c96
+Quick Quit - escape then ` (or just press quit once in the pause menu)
+
+Debug Mode - tab (note that the debug info wont go once you press tab again, this is on purpose, but will be changed in the future)
+
 
