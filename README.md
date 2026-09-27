@@ -15,7 +15,8 @@ https://github.com/user-attachments/assets/7f53e90c-d294-4298-b332-af277ab2ad35
 ## Installation
 * go to releases
 * click on v1.0.1-alpha
-* download the .exe file
+* download the `.exe` file
+* run the executable
 
 <br>
 
