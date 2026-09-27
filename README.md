@@ -36,7 +36,7 @@ If you go to: res://src/levels/terrain.tcsn, then click on the mesh. On the righ
 * change the normal basis (sounds complicated, but just drag the values in the matrix until it looks cool)
 
 If you go to res://src/core/main_game/main_game.tscn...
-* click on the Player in the scene tree, and change its speed (if the speed is too high, but under 200m/s should be fine, you may clip through the mess)
+* click on the Player in the scene tree, and change its speed (if the speed is too high, but under 200m/s should be fine, you may clip through the mesh)
 * click on DirectionalLight3D in the scene tree, and rotate it to see how the terrain would look with the sun at different positions in the sky (looks terrible atm at night)
 
 ## Hot Keys
