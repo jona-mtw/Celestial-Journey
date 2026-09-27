@@ -1,6 +1,6 @@
-# **Worlds Unbound**
+<img width="1907" height="1068" alt="Screenshot 2026-09-16 014012" src="https://github.com/user-attachments/assets/ac3c9ca6-5a0b-44af-8621-617888094caf" />
 
-https://github.com/user-attachments/assets/7f53e90c-d294-4298-b332-af277ab2ad35
+# **Worlds Unbound**
 
 A game where the player explores procedurally generated planets in realistic orbits in space ships constructed by the player. As of right now (v1.0.1-alpha) this is merely just a terrain engine for my game, which I went through with multiple iterations of terrain.
 
@@ -9,6 +9,8 @@ A game where the player explores procedurally generated planets in realistic orb
 * procedural terrain generation
 * UI - pause menu, settings menu (just a template, nothing in it right now) and main menu
 * basic terrain textures (just 3 colours based on height)
+
+https://github.com/user-attachments/assets/7f53e90c-d294-4298-b332-af277ab2ad35
 
 ## Installation
 * go to releases
