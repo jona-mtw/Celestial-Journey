@@ -1,5 +1,7 @@
 # **Worlds Unbound**
 
+https://github.com/user-attachments/assets/7f53e90c-d294-4298-b332-af277ab2ad35
+
 A game where the player explores procedurally generated planets in realistic orbits in space ships constructed by the player. As of right now (v1.0.1-alpha) this is merely just a terrain engine for my game, which I went through with multiple iterations of terrain.
 
 ## Current State
@@ -47,3 +49,4 @@ Quick Quit - escape then ` (or just press quit once in the pause menu)
 Debug Mode - tab (note that the debug info wont go once you press tab again, this is on purpose, but will be changed in the future)
 
 
+PS. performace is usually above 90fps or less than 15ms, i think there were only lag spikes because i was recording
