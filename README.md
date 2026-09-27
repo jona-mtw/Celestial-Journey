@@ -26,6 +26,7 @@ https://github.com/user-attachments/assets/7f53e90c-d294-4298-b332-af277ab2ad35
 * import the project into godot, by opening godot, then clicking the import button, and finding the project directory
 
 **What you can do if you open it in Godot:**
+
 If you go to: res://src/levels/terrain.tcsn, then click on the mesh. On the right hand side, click on Surface Material Override, then the little icon next to the reload icon, then terrain.gdshader...
 * click and drag on the U and V values to see the terrain moving on a unmoving plane.
 * click on heightmap > FastNoiseLite to change the noise settings. Tweak with them until you get something you like (make sure to expand the Fractal panel)
